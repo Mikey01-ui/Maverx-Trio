@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1 - Governance Gate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Maverx Brand Colors */
+            --purple-primary: #5400ad;
+            --purple-dark: #1f0531;
+            --purple-deeper: #100021;
+            --purple-mid: #30004a;
+            --orange: #f79421;
+            --pink: #d31972;
+            --grey-light: #d6e1e5;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--purple-deeper) 0%, var(--purple-dark) 50%, var(--purple-mid) 100%);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.06;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, var(--purple-primary) 35px, var(--purple-primary) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, var(--orange) 35px, var(--orange) 70px);
+            animation: patternShift 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes patternShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        /* Gradient orbs */
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            top: 10%;
+            right: 10%;
+            background: radial-gradient(circle, var(--orange) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: 15%;
+            left: 5%;
+            background: radial-gradient(circle, var(--pink) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        /* Navigation arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .nav-arrow:hover {
+            background: var(--orange);
+            border-color: var(--orange);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 10px 30px rgba(247, 148, 33, 0.4);
+        }
+
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        /* Main container */
+        .intro-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Header section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 50px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .round-badge-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .round-number {
+            display: inline-block;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            color: var(--white);
+            border-radius: 25px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(247, 148, 33, 0.3);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: var(--orange);
+            box-shadow: 0 0 10px var(--orange);
+        }
+
+        .round-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--grey-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .round-subtitle {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--grey-light);
+            margin-bottom: 35px;
+        }
+
+        .round-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .round-icon::after {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 2px dashed rgba(247, 148, 33, 0.3);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .round-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: var(--orange);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Content grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        /* Scenario section */
+        .scenario-section {
+            background: rgba(84, 0, 173, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .scenario-section:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .section-label {
+            position: absolute;
+            top: -12px;
+            left: 30px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            color: var(--white);
+            padding: 6px 18px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .section-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--white);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .scenario-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--grey-light);
+            margin-bottom: 20px;
+        }
+
+        .scenario-highlight {
+            background: rgba(247, 148, 33, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 20px 25px;
+            margin-top: 25px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .highlight-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .highlight-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--white);
+        }
+
+        /* Objectives section */
+        .objectives-section {
+            background: rgba(211, 25, 114, 0.12);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .objectives-section:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .objectives-list {
+            list-style: none;
+        }
+
+        .objective-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .objective-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--pink);
+            transform: translateX(5px);
+        }
+
+        .objective-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .objective-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--pink) 0%, var(--purple-primary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .objective-content {
+            flex: 1;
+        }
+
+        .objective-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .objective-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--grey-light);
+        }
+
+        /* Instructions section */
+        .instructions-section {
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .instructions-section .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .instruction-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .instruction-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange) 0%, var(--pink) 50%, var(--purple-primary) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .instruction-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-10px);
+        }
+
+        .instruction-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .instruction-step {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(247, 148, 33, 0.2);
+            color: var(--orange);
+            border-radius: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s ease;
+        }
+
+        .instruction-card:hover .instruction-icon {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .instruction-icon svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--white);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .instruction-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .instruction-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--grey-light);
+        }
+
+        /* Preview section */
+        .preview-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 45px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(20px);
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .preview-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-description {
+            font-size: 18px;
+            color: var(--grey-light);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-preview-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-preview-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--orange);
+            transform: translateY(-5px);
+        }
+
+        .stat-preview-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--purple-primary) 0%, var(--pink) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-preview-icon svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--white);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .stat-preview-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        /* Action section */
+        .action-section {
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.8s backwards;
+        }
+
+        .ready-message {
+            font-size: 20px;
+            color: var(--grey-light);
+            margin-bottom: 30px;
+        }
+
+        .start-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 25px 60px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(247, 148, 33, 0.3);
+        }
+
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .start-button:hover::before {
+            left: 100%;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 70px rgba(247, 148, 33, 0.4);
+        }
+
+        .start-icon {
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .start-button:hover .start-icon {
+            transform: translateX(5px);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 25px;
+            background: rgba(84, 0, 173, 0.3);
+            border: 2px solid var(--purple-primary);
+            border-radius: 25px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .instructions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .intro-container {
+                padding: 40px 20px;
+            }
+
+            .round-title {
+                font-size: 42px;
+            }
+
+            .round-subtitle {
+                font-size: 18px;
+            }
+
+            .scenario-section,
+            .objectives-section {
+                padding: 30px;
+            }
+
+            .preview-section {
+                padding: 30px;
+            }
+
+            .stats-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .start-button {
+                padding: 20px 40px;
+                font-size: 18px;
+            }
+
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+            }
+
+            .nav-arrow.left {
+                left: 15px;
+            }
+
+            .nav-arrow.right {
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background elements -->
+    <div class="bg-pattern"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+
+    <!-- Navigation arrows -->
+    <a href="#" class="nav-arrow left">
+        <svg viewBox="0 0 24 24">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+    </a>
+    <a href="#" class="nav-arrow right">
+        <svg viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+    </a>
+
+    <div class="intro-container">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="round-badge-container">
+                <div class="round-number">Round 1 of 5</div>
+                <div class="progress-dots">
+                    <div class="progress-dot active"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                </div>
+            </div>
+            <h1 class="round-title">Governance Gate</h1>
+            <p class="round-subtitle">Data Awareness & Organizational Data Culture</p>
+            <div class="round-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5"></path>
+                    <path d="M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Main content grid -->
+        <div class="content-grid">
+            <!-- Scenario -->
+            <div class="scenario-section">
+                <span class="section-label">The Challenge</span>
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+                <h2 class="section-title">The Scenario</h2>
+                
+                <p class="scenario-text">
+                    You've just joined a growing tech company as a Data Analyst. On your first day, you discover that the organization has accumulated datasets across multiple departments, but there's confusion about who owns what data.
+                </p>
+
+                <p class="scenario-text">
+                    Your manager has tasked you with organizing the company's data landscape by correctly assigning each dataset to its rightful departmental owner. This isn't just about storage locations—it's about establishing clear accountability and governance.
+                </p>
+
+                <div class="scenario-highlight">
+                    <div class="highlight-title">Your Mission</div>
+                    <div class="highlight-text">
+                        Analyze dataset metadata, lineage, and ownership information to assign 10-15 datasets to their correct departments. Each correct placement demonstrates your understanding of data governance principles.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Objectives -->
+            <div class="objectives-section">
+                <span class="section-label">Learning Goals</span>
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h2 class="section-title">Learning Objectives</h2>
+                
+                <ul class="objectives-list">
+                    <li class="objective-item">
+                        <div class="objective-number">1</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Identify Data Ownership</div>
+                            <div class="objective-description">
+                                Distinguish between data owners and data users based on accountability and stewardship.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">2</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Analyze Metadata</div>
+                            <div class="objective-description">
+                                Evaluate data source, lineage, and reliability indicators to make informed decisions.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">3</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Apply Governance Principles</div>
+                            <div class="objective-description">
+                                Understand that ownership is based on responsibility, not just usage or storage location.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">4</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Make Decisions Under Pressure</div>
+                            <div class="objective-description">
+                                Practice critical thinking and decision-making with time constraints.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions-section">
+            <h2 class="section-title">How to Play</h2>
+            
+            <div class="instructions-grid">
+                <div class="instruction-card">
+                    <div class="instruction-step">Step 1</div>
+                    <div class="instruction-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </div>
+                    <div class="instruction-title">Examine Datasets</div>
+                    <div class="instruction-text">
+                        Click on each dataset card to view detailed metadata including owner, source, and lineage.
+                    </div>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-step">Step 2</div>
+                    <div class="instruction-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        </svg>
+                    </div>
+                    <div class="instruction-title">Drag & Drop</div>
+                    <div class="instruction-text">
+                        Drag datasets to their correct department drop zones based on ownership principles.
+                    </div>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-step">Step 3</div>
+                    <div class="instruction-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="instruction-title">Justify Reasoning</div>
+                    <div class="instruction-text">
+                        After placement, explain your decision-making process in the reasoning challenge.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-section">
+            <h2 class="preview-title">What You'll Be Working With</h2>
+            <p class="preview-description">
+                Dataset Cards → Metadata Analysis → Department Assignment
+            </p>
+
+            <div class="stats-preview">
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-preview-label">Time Challenge</div>
+                </div>
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="stat-preview-label">Points System</div>
+                </div>
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="stat-preview-label">Hints Available</div>
+                </div>
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-preview-label">Real-time Feedback</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action -->
+        <div class="action-section">
+            <p class="ready-message">
+                Ready to demonstrate your data governance expertise?
+            </p>
+            
+            <button class="start-button" onclick="startRound()">
+                <span>Start Round 1</span>
+                <span class="start-icon">→</span>
+            </button>
+
+            <div class="difficulty-badge">Difficulty: Intermediate</div>
+        </div>
+    </div>
+
+    <script>
+        function startRound() {
+            // Add navigation logic here
+            alert('Starting round...');
+        }
+
+        // Animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.instruction-card, .stat-preview-item, .objective-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+    <a href="1Welcome_Page_MargusColors.html" class="nav-arrow left" title="Previous">←</a>
+    <a href="3LevelOneGameplay_I_MargusColors.html" class="nav-arrow right" title="Next">→</a>
+</body>
+</html>

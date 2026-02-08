@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1 - Reasoning Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Maverx Brand Colors */
+            --purple-primary: #5400ad;
+            --purple-dark: #1f0531;
+            --purple-deeper: #100021;
+            --purple-mid: #30004a;
+            --orange: #f79421;
+            --pink: #d31972;
+            --grey-light: #d6e1e5;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--purple-deeper) 0%, var(--purple-dark) 50%, var(--purple-mid) 100%);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.04;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, var(--purple-primary) 35px, var(--purple-primary) 70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .nav-arrow:hover {
+            background: var(--orange);
+            border-color: var(--orange);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 10px 30px rgba(247, 148, 33, 0.4);
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        /* ==================== HEADER BAR ==================== */
+        .header-bar {
+            background: rgba(31, 5, 49, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 18px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .player-info:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--orange);
+        }
+
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .player-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .header-center {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 35px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .round-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .round-subtitle {
+            font-size: 11px;
+            color: var(--grey-light);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .timer-display,
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .timer-display:hover,
+        .score-display:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--orange);
+        }
+
+        .timer-icon,
+        .score-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .timer-icon svg,
+        .score-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--orange);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .timer-value,
+        .score-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .main-container {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== INTRO SECTION ==================== */
+        .intro-section {
+            background: rgba(84, 0, 173, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .intro-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .intro-icon svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--white);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .intro-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+
+        .intro-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--grey-light);
+            margin-bottom: 30px;
+        }
+
+        .intro-stats {
+            display: flex;
+            gap: 35px;
+        }
+
+        .intro-stat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .intro-stat-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(247, 148, 33, 0.2);
+            border: 2px solid var(--orange);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-stat-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--orange);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .intro-stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .intro-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .intro-stat-label {
+            font-size: 13px;
+            color: var(--grey-light);
+        }
+
+        /* ==================== PROGRESS BAR ==================== */
+        .progress-bar-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px 35px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .progress-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .progress-count {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            max-width: 500px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 30px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--orange) 0%, var(--pink) 50%, var(--purple-primary) 100%);
+            border-radius: 23px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+            box-shadow: 0 0 15px rgba(247, 148, 33, 0.5);
+        }
+
+        /* ==================== QUESTIONS CONTAINER ==================== */
+        .questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 35px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .question-card.answered {
+            border-color: var(--orange);
+        }
+
+        .question-card.incorrect {
+            border-color: var(--pink);
+        }
+
+        .question-header {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--purple-primary) 0%, var(--pink) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .question-info {
+            flex: 1;
+        }
+
+        .dataset-reference {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(247, 148, 33, 0.15);
+            border: 1px solid var(--orange);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--orange);
+            margin-bottom: 15px;
+        }
+
+        .dataset-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .placement-info {
+            font-size: 14px;
+            color: var(--grey-light);
+            margin-bottom: 15px;
+        }
+
+        .placement-info strong {
+            color: var(--white);
+            font-weight: 700;
+        }
+
+        .question-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.5;
+        }
+
+        /* ==================== ANSWER OPTIONS ==================== */
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--orange);
+            transform: translateX(5px);
+        }
+
+        .answer-option.selected {
+            background: rgba(247, 148, 33, 0.15);
+            border-color: var(--orange);
+        }
+
+        .answer-option.correct {
+            background: rgba(247, 148, 33, 0.2);
+            border-color: var(--orange);
+            pointer-events: none;
+        }
+
+        .answer-option.incorrect {
+            background: rgba(211, 25, 114, 0.15);
+            border-color: var(--pink);
+            pointer-events: none;
+        }
+
+        .option-radio {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option.selected .option-radio,
+        .answer-option.correct .option-radio {
+            border-color: var(--orange);
+        }
+
+        .answer-option.selected .option-radio::after,
+        .answer-option.correct .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: var(--orange);
+            border-radius: 50%;
+        }
+
+        .answer-option.incorrect .option-radio {
+            border-color: var(--pink);
+        }
+
+        .answer-option.incorrect .option-radio::after {
+            content: '✕';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--pink);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .option-label {
+            flex-shrink: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--grey-light);
+        }
+
+        .answer-option.selected .option-text,
+        .answer-option.correct .option-text {
+            color: var(--white);
+        }
+
+        /* ==================== ANSWER FEEDBACK ==================== */
+        .answer-feedback {
+            display: none;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .answer-feedback.show {
+            display: flex;
+            gap: 15px;
+        }
+
+        .answer-feedback.correct {
+            background: rgba(247, 148, 33, 0.15);
+            border: 2px solid var(--orange);
+        }
+
+        .answer-feedback.incorrect {
+            background: rgba(211, 25, 114, 0.15);
+            border: 2px solid var(--pink);
+        }
+
+        .feedback-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .answer-feedback.correct .feedback-icon {
+            background: var(--orange);
+            color: var(--white);
+        }
+
+        .answer-feedback.incorrect .feedback-icon {
+            background: var(--pink);
+            color: var(--white);
+        }
+
+        .feedback-text {
+            flex: 1;
+        }
+
+        .feedback-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+
+        .feedback-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--grey-light);
+        }
+
+        /* ==================== SUBMIT SECTION ==================== */
+        .submit-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            text-align: center;
+        }
+
+        .submit-info {
+            margin-bottom: 30px;
+        }
+
+        .submit-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .submit-description {
+            font-size: 16px;
+            color: var(--grey-light);
+            line-height: 1.6;
+        }
+
+        .submit-button {
+            padding: 22px 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-button:not(:disabled) {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border-color: transparent;
+            color: var(--white);
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(247, 148, 33, 0.3);
+        }
+
+        .submit-button:not(:disabled):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(247, 148, 33, 0.4);
+        }
+
+        /* ==================== COMPLETION MODAL ==================== */
+        .completion-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .completion-modal.active {
+            display: flex;
+        }
+
+        .completion-content {
+            background: linear-gradient(135deg, rgba(31, 5, 49, 0.95) 0%, rgba(48, 0, 74, 0.95) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalIn 0.4s ease-out;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .completion-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 50px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .completion-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .completion-message {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--grey-light);
+            margin-bottom: 40px;
+        }
+
+        .completion-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .completion-stat {
+            text-align: center;
+        }
+
+        .completion-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .completion-stat-label {
+            font-size: 13px;
+            color: var(--grey-light);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .continue-button {
+            padding: 20px 50px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(247, 148, 33, 0.3);
+        }
+
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(247, 148, 33, 0.4);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--orange);
+            border-radius: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-bar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .header-center {
+                order: -1;
+                width: 100%;
+            }
+
+            .main-container {
+                padding: 30px 20px;
+            }
+
+            .intro-section {
+                padding: 30px;
+            }
+
+            .intro-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .progress-bar-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .progress-bar-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .question-card {
+                padding: 25px;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .answer-option {
+                padding: 15px;
+            }
+
+            .completion-content {
+                padding: 40px 30px;
+            }
+
+            .completion-stats {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Header Bar -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="player-info">
+                <div class="player-avatar">JD</div>
+                <div class="player-name">Player</div>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="round-title">Reasoning Challenge</div>
+            <div class="round-subtitle">Phase 2 - Round 1</div>
+        </div>
+
+        <div class="header-right">
+            <div class="timer-display">
+                <div class="timer-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="timer-value">08:15</div>
+            </div>
+            <div class="score-display">
+                <div class="score-icon">
+                    <svg viewBox="0 0 24 24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </div>
+                <div class="score-value">850</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Intro Section -->
+        <div class="intro-section">
+            <div class="intro-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <h2 class="intro-title">Explain Your Reasoning</h2>
+            <p class="intro-description">
+                You've successfully placed the datasets. Now demonstrate your understanding of data governance principles by explaining why each placement was correct. Select the answer that best describes the ownership rationale.
+            </p>
+            <div class="intro-stats">
+                <div class="intro-stat">
+                    <div class="intro-stat-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div class="intro-stat-info">
+                        <div class="intro-stat-value">5</div>
+                        <div class="intro-stat-label">Questions</div>
+                    </div>
+                </div>
+                <div class="intro-stat">
+                    <div class="intro-stat-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="intro-stat-info">
+                        <div class="intro-stat-value">+20</div>
+                        <div class="intro-stat-label">Points Each</div>
+                    </div>
+                </div>
+                <div class="intro-stat">
+                    <div class="intro-stat-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="intro-stat-info">
+                        <div class="intro-stat-value">100%</div>
+                        <div class="intro-stat-label">Bonus Possible</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-section">
+            <div>
+                <div class="progress-label">Progress:</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <div>
+                <div class="progress-count"><span id="completed">0</span> / <span id="total">5</span></div>
+            </div>
+        </div>
+
+        <!-- Questions Container -->
+        <div class="questions-container">
+            <!-- Question 1 -->
+            <div class="question-card" data-question="1">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <div class="question-info">
+                        <div class="dataset-reference">
+                            <span class="dataset-icon">📊</span>
+                            <span>Sales Q4 2024</span>
+                        </div>
+                        <div class="placement-info">
+                            You placed this dataset in: <strong>Sales Department</strong>
+                        </div>
+                        <div class="question-text">
+                            Why does the Sales department own this quarterly sales data?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-options">
+                    <div class="answer-option" data-answer="A" onclick="selectAnswer(1, 'A', true)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">A.</div>
+                        <div class="option-text">
+                            Sales is accountable for the accuracy and completeness of this data, as it reflects their performance and is used for their strategic planning and reporting obligations.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="B" onclick="selectAnswer(1, 'B', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">B.</div>
+                        <div class="option-text">
+                            The data is stored on the Sales department's servers.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="C" onclick="selectAnswer(1, 'C', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">C.</div>
+                        <div class="option-text">
+                            Sales employees are the primary users of this data.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="D" onclick="selectAnswer(1, 'D', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">D.</div>
+                        <div class="option-text">
+                            The VP of Sales requested ownership of the dataset.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-feedback" id="feedback-1">
+                    <span class="feedback-icon"></span>
+                    <div class="feedback-text">
+                        <div class="feedback-title"></div>
+                        <div class="feedback-message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card" data-question="2">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <div class="question-info">
+                        <div class="dataset-reference">
+                            <span class="dataset-icon">📈</span>
+                            <span>Campaign Metrics</span>
+                        </div>
+                        <div class="placement-info">
+                            You placed this dataset in: <strong>Marketing Department</strong>
+                        </div>
+                        <div class="question-text">
+                            What principle determines Marketing's ownership of campaign performance data?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-options">
+                    <div class="answer-option" data-answer="A" onclick="selectAnswer(2, 'A', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">A.</div>
+                        <div class="option-text">
+                            Marketing has the most sophisticated analytics tools.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="B" onclick="selectAnswer(2, 'B', true)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">B.</div>
+                        <div class="option-text">
+                            Marketing is responsible for campaign execution and must ensure data quality, regulatory compliance, and accurate reporting of campaign effectiveness.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="C" onclick="selectAnswer(2, 'C', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">C.</div>
+                        <div class="option-text">
+                            The Marketing team created the original campaigns.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="D" onclick="selectAnswer(2, 'D', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">D.</div>
+                        <div class="option-text">
+                            Other departments don't need access to campaign data.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-feedback" id="feedback-2">
+                    <span class="feedback-icon"></span>
+                    <div class="feedback-text">
+                        <div class="feedback-title"></div>
+                        <div class="feedback-message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card" data-question="3">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <div class="question-info">
+                        <div class="dataset-reference">
+                            <span class="dataset-icon">💰</span>
+                            <span>Budget Forecast 2025</span>
+                        </div>
+                        <div class="placement-info">
+                            You placed this dataset in: <strong>Finance Department</strong>
+                        </div>
+                        <div class="question-text">
+                            Why is Finance the correct owner of organizational budget data?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-options">
+                    <div class="answer-option" data-answer="A" onclick="selectAnswer(3, 'A', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">A.</div>
+                        <div class="option-text">
+                            Finance employees have accounting certifications.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="B" onclick="selectAnswer(3, 'B', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">B.</div>
+                        <div class="option-text">
+                            Budget data contains sensitive financial information.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="C" onclick="selectAnswer(3, 'C', true)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">C.</div>
+                        <div class="option-text">
+                            Finance has organizational accountability for budget accuracy, compliance with financial regulations, audit requirements, and maintaining the integrity of all financial planning data.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="D" onclick="selectAnswer(3, 'D', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">D.</div>
+                        <div class="option-text">
+                            The CFO manages the Finance department.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-feedback" id="feedback-3">
+                    <span class="feedback-icon"></span>
+                    <div class="feedback-text">
+                        <div class="feedback-title"></div>
+                        <div class="feedback-message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card" data-question="4">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <div class="question-info">
+                        <div class="dataset-reference">
+                            <span class="dataset-icon">🖥️</span>
+                            <span>IT Service Desk Tickets</span>
+                        </div>
+                        <div class="placement-info">
+                            You placed this dataset in: <strong>IT Department</strong>
+                        </div>
+                        <div class="question-text">
+                            What makes IT the appropriate owner of service desk ticket data?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-options">
+                    <div class="answer-option" data-answer="A" onclick="selectAnswer(4, 'A', true)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">A.</div>
+                        <div class="option-text">
+                            While other departments may use service desk data for analysis, IT owns it because they are accountable for its accuracy, maintenance, and compliance.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="B" onclick="selectAnswer(4, 'B', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">B.</div>
+                        <div class="option-text">
+                            IT owns it because they have the most technical knowledge.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="C" onclick="selectAnswer(4, 'C', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">C.</div>
+                        <div class="option-text">
+                            Only IT department employees can access service desk tickets.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="D" onclick="selectAnswer(4, 'D', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">D.</div>
+                        <div class="option-text">
+                            The data is stored on IT servers, making them the automatic owner.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-feedback" id="feedback-4">
+                    <span class="feedback-icon"></span>
+                    <div class="feedback-text">
+                        <div class="feedback-title"></div>
+                        <div class="feedback-message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card" data-question="5">
+                <div class="question-header">
+                    <div class="question-number">5</div>
+                    <div class="question-info">
+                        <div class="dataset-reference">
+                            <span class="dataset-icon">👥</span>
+                            <span>HR Employee Data</span>
+                        </div>
+                        <div class="placement-info">
+                            You placed this dataset in: <strong>Human Resources Department</strong>
+                        </div>
+                        <div class="question-text">
+                            Why is HR the appropriate data owner for employee information?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-options">
+                    <div class="answer-option" data-answer="A" onclick="selectAnswer(5, 'A', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">A.</div>
+                        <div class="option-text">
+                            HR has the largest database of employee information.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="B" onclick="selectAnswer(5, 'B', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">B.</div>
+                        <div class="option-text">
+                            Employee data contains sensitive personal information that should be restricted.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="C" onclick="selectAnswer(5, 'C', true)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">C.</div>
+                        <div class="option-text">
+                            HR has legal and organizational responsibility for employee data governance, including privacy compliance, data quality, and authorized access management.
+                        </div>
+                    </div>
+                    <div class="answer-option" data-answer="D" onclick="selectAnswer(5, 'D', false)">
+                        <div class="option-radio"></div>
+                        <div class="option-label">D.</div>
+                        <div class="option-text">
+                            It's standard practice for HR to own all people-related data.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-feedback" id="feedback-5">
+                    <span class="feedback-icon"></span>
+                    <div class="feedback-text">
+                        <div class="feedback-title"></div>
+                        <div class="feedback-message"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-section">
+            <div class="submit-info">
+                <div class="submit-title">Ready to Submit Your Answers?</div>
+                <div class="submit-description">
+                    Review your reasoning carefully. Each correct answer demonstrates your understanding of data governance principles.
+                </div>
+            </div>
+            <button class="submit-button" id="submitButton" disabled onclick="submitAnswers()">
+                <span>Submit All Answers</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Completion Modal -->
+    <div class="completion-modal" id="completionModal">
+        <div class="completion-content">
+            <div class="completion-icon">✓</div>
+            <div class="completion-title">Round 1 Complete!</div>
+            <div class="completion-message">
+                Excellent work! You've demonstrated strong understanding of data governance and organizational accountability. 
+                Your reasoning shows you can distinguish between data ownership and usage.
+            </div>
+            <div class="completion-stats">
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="finalScore">950</div>
+                    <div class="completion-stat-label">Final Score</div>
+                </div>
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="correctAnswers">5/5</div>
+                    <div class="completion-stat-label">Correct</div>
+                </div>
+                <div class="completion-stat">
+                    <div class="completion-stat-value" id="bonusPoints">+100</div>
+                    <div class="completion-stat-label">Bonus</div>
+                </div>
+            </div>
+            <button class="continue-button" onclick="continueToNextRound()">
+                Continue to Round 2 →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let answeredQuestions = 0;
+        const totalQuestions = 5;
+        let userAnswers = {};
+
+        function updateProgress() {
+            const percentage = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('completed').textContent = answeredQuestions;
+
+            if (answeredQuestions === totalQuestions) {
+                document.getElementById('submitButton').disabled = false;
+            }
+        }
+
+        function selectAnswer(questionNum, answer, isCorrect) {
+            const questionCard = document.querySelector(`[data-question="${questionNum}"]`);
+            const options = questionCard.querySelectorAll('.answer-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            const selectedOption = questionCard.querySelector(`[data-answer="${answer}"]`);
+            selectedOption.classList.add('selected');
+
+            if (!userAnswers[questionNum]) {
+                answeredQuestions++;
+                updateProgress();
+            }
+            userAnswers[questionNum] = { answer, isCorrect };
+        }
+
+        function submitAnswers() {
+            let finalCorrect = 0;
+            let bonusPoints = 0;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionCard = document.querySelector(`[data-question="${i}"]`);
+                const userAnswer = userAnswers[i];
+                const selectedOption = questionCard.querySelector(`[data-answer="${userAnswer.answer}"]`);
+                const feedback = document.getElementById(`feedback-${i}`);
+
+                if (userAnswer.isCorrect) {
+                    selectedOption.classList.add('correct');
+                    questionCard.classList.add('answered');
+                    feedback.classList.add('show', 'correct');
+                    feedback.querySelector('.feedback-icon').textContent = '✓';
+                    feedback.querySelector('.feedback-title').textContent = 'Correct!';
+                    feedback.querySelector('.feedback-message').textContent = 'You correctly identified the key governance principle.';
+                    
+                    finalCorrect++;
+                    bonusPoints += 20;
+                } else {
+                    selectedOption.classList.add('incorrect');
+                    questionCard.classList.add('incorrect');
+                    feedback.classList.add('show', 'incorrect');
+                    feedback.querySelector('.feedback-icon').textContent = '✕';
+                    feedback.querySelector('.feedback-title').textContent = 'Not Quite';
+                    feedback.querySelector('.feedback-message').textContent = 'Review the metadata and focus on organizational accountability.';
+                }
+            }
+
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('submitButton').innerHTML = '<span>✓ Answers Submitted</span>';
+
+            setTimeout(() => {
+                showCompletionModal();
+            }, 2000);
+        }
+
+        function showCompletionModal() {
+            document.getElementById('completionModal').classList.add('active');
+        }
+
+        function continueToNextRound() {
+            alert('Navigate to: Round 2 - Insight Hunter');
+        }
+
+        updateProgress();
+    </script>
+    <a href="3LevelOneGameplay_I_MargusColors.html" class="nav-arrow left" title="Previous">←</a>
+    <a href="5LevelOneComplete_MargusColors.html" class="nav-arrow right" title="Next">→</a>
+</body>
+</html>
