@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level 1 - Round Introduction (B&amp;W Wireframe)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -39,6 +40,21 @@
             color: var(--brand-light);
             min-height: 100vh;
         }
+
+        .round-icon i,
+        .section-icon i,
+        .instruction-icon i,
+        .stat-preview-icon i,
+        .start-icon i {
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .round-icon i { font-size: 40px; }
+        .section-icon i { font-size: 20px; }
+        .instruction-icon i { font-size: 18px; }
+        .stat-preview-icon i { font-size: 16px; }
+        .start-icon i { font-size: 16px; }
 
         /* ==================== NAVIGATION ARROWS ==================== */
         .nav-arrow {
@@ -628,14 +644,14 @@
             <div class="round-number">Round 1 of 5</div>
             <h1 class="round-title">Governance Gate</h1>
             <p class="round-subtitle">Data Awareness &amp; Organizational Data Culture</p>
-            <div class="round-icon">Icon<br>Placeholder</div>
+            <div class="round-icon"><i class="fa-solid fa-shield-halved"></i></div>
         </div>
 
         <!-- MAIN CONTENT GRID -->
         <div class="content-grid">
             <!-- SCENARIO SECTION -->
             <div class="scenario-section">
-                <div class="section-icon">Icon</div>
+                <div class="section-icon"><i class="fa-solid fa-briefcase"></i></div>
                 <h2 class="section-title">The Challenge</h2>
                 
                 <p class="scenario-text">
@@ -656,7 +672,7 @@
 
             <!-- OBJECTIVES SECTION -->
             <div class="objectives-section">
-                <div class="section-icon">Icon</div>
+                <div class="section-icon"><i class="fa-solid fa-bullseye"></i></div>
                 <h2 class="section-title">Learning Objectives</h2>
                 
                 <ul class="objectives-list">
@@ -710,7 +726,7 @@
             <div class="instructions-grid">
                 <div class="instruction-card">
                     <div class="instruction-step">Step 1</div>
-                    <div class="instruction-icon">Icon</div>
+                    <div class="instruction-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                     <div class="instruction-title">Examine Datasets</div>
                     <div class="instruction-text">
                         Click on each dataset card to view detailed metadata including owner, source, and lineage.
@@ -719,7 +735,7 @@
 
                 <div class="instruction-card">
                     <div class="instruction-step">Step 2</div>
-                    <div class="instruction-icon">Icon</div>
+                    <div class="instruction-icon"><i class="fa-solid fa-hand-pointer"></i></div>
                     <div class="instruction-title">Drag &amp; Drop</div>
                     <div class="instruction-text">
                         Drag datasets to their correct department drop zones based on ownership principles.
@@ -728,7 +744,7 @@
 
                 <div class="instruction-card">
                     <div class="instruction-step">Step 3</div>
-                    <div class="instruction-icon">Icon</div>
+                    <div class="instruction-icon"><i class="fa-solid fa-comment-dots"></i></div>
                     <div class="instruction-title">Justify Reasoning</div>
                     <div class="instruction-text">
                         After placement, explain your decision-making process in the reasoning challenge.
@@ -756,19 +772,19 @@
 
             <div class="stats-preview">
                 <div class="stat-preview-item">
-                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-icon"><i class="fa-solid fa-clock"></i></div>
                     <div class="stat-preview-label">Time Challenge</div>
                 </div>
                 <div class="stat-preview-item">
-                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-icon"><i class="fa-solid fa-trophy"></i></div>
                     <div class="stat-preview-label">Points System</div>
                 </div>
                 <div class="stat-preview-item">
-                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-icon"><i class="fa-solid fa-lightbulb"></i></div>
                     <div class="stat-preview-label">Hints Available</div>
                 </div>
                 <div class="stat-preview-item">
-                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-icon"><i class="fa-solid fa-bolt"></i></div>
                     <div class="stat-preview-label">Real-time Feedback</div>
                 </div>
             </div>
@@ -782,7 +798,7 @@
             
             <button class="start-button" onclick="startRound()">
                 <span>Start Round 1</span>
-                <span class="start-icon">→</span>
+                <span class="start-icon"><i class="fa-solid fa-arrow-right"></i></span>
             </button>
 
             <div class="difficulty-badge">Difficulty: Intermediate</div>

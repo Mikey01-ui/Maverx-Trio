@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level 1 - Gameplay Screen (B&W Wireframe)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -39,6 +40,26 @@
             color: var(--white);
             min-height: 100vh;
         }
+
+        .timer-icon i,
+        .score-icon i,
+        .hint-icon i,
+        .dataset-icon i,
+        .dept-icon i,
+        .feedback-icon i,
+        .metadata-header-icon i {
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .timer-icon i,
+        .score-icon i,
+        .hint-icon i,
+        .feedback-icon i { font-size: 14px; }
+
+        .dataset-icon i { font-size: 18px; }
+        .dept-icon i { font-size: 16px; }
+        .metadata-header-icon i { font-size: 20px; }
 
         /* ==================== NAVIGATION ARROWS ==================== */
         .nav-arrow {
@@ -987,11 +1008,11 @@
 
         <div class="header-right">
             <div class="timer-display">
-                <span class="timer-icon">Icon</span>
+                <span class="timer-icon"><i class="fa-solid fa-clock"></i></span>
                 <span class="timer-value" id="timer">12:45</span>
             </div>
             <div class="score-display">
-                <span class="score-icon">Icon</span>
+                <span class="score-icon"><i class="fa-solid fa-trophy"></i></span>
                 <span class="score-value" id="score">250</span>
             </div>
         </div>
@@ -1009,7 +1030,7 @@
                 <span class="progress-count"><span id="completed">3</span> / <span id="total">10</span> Datasets Placed</span>
             </div>
             <button class="hint-button" onclick="showHint()">
-                <span class="hint-icon">Icon</span>
+                <span class="hint-icon"><i class="fa-solid fa-lightbulb"></i></span>
                 <span>Get Hint</span>
                 <span class="hint-count" id="hintCount">3</span>
             </button>
@@ -1023,7 +1044,7 @@
                 <div class="datasets-grid" id="datasetsGrid">
                     <!-- Dataset Cards -->
                     <div class="dataset-card" draggable="true" data-id="1">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Sales Q4 2024</div>
                             <div class="dataset-meta">sales_q4_2024.csv</div>
@@ -1032,7 +1053,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="2">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Customer Database</div>
                             <div class="dataset-meta">customer_master.db</div>
@@ -1041,7 +1062,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="3">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Financial Reports</div>
                             <div class="dataset-meta">finance_2024.xlsx</div>
@@ -1050,7 +1071,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="4">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Production Logs</div>
                             <div class="dataset-meta">production_2024.log</div>
@@ -1059,7 +1080,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="5">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Inventory System</div>
                             <div class="dataset-meta">inventory_master.db</div>
@@ -1068,7 +1089,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="6">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Marketing Campaigns</div>
                             <div class="dataset-meta">campaigns_2024.json</div>
@@ -1077,7 +1098,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="7">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">IT Service Desk</div>
                             <div class="dataset-meta">servicedesk_tickets.csv</div>
@@ -1086,7 +1107,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="8">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">HR Employee Data</div>
                             <div class="dataset-meta">hr_employees.db</div>
@@ -1095,7 +1116,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="9">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Logistics Tracking</div>
                             <div class="dataset-meta">logistics_2024.csv</div>
@@ -1104,7 +1125,7 @@
                     </div>
 
                     <div class="dataset-card" draggable="true" data-id="10">
-                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-icon"><i class="fa-solid fa-database"></i></div>
                         <div class="dataset-info">
                             <div class="dataset-name">Website Analytics</div>
                             <div class="dataset-meta">web_analytics.json</div>
@@ -1121,7 +1142,7 @@
                     <!-- Sales Department -->
                     <div class="drop-zone" data-dept="sales">
                         <div class="drop-zone-header">
-                            <div class="dept-icon">Icon</div>
+                            <div class="dept-icon"><i class="fa-solid fa-building"></i></div>
                             <div class="dept-name">Sales</div>
                         </div>
                         <div class="drop-zone-content">
@@ -1132,7 +1153,7 @@
                     <!-- Finance Department -->
                     <div class="drop-zone" data-dept="finance">
                         <div class="drop-zone-header">
-                            <div class="dept-icon">Icon</div>
+                            <div class="dept-icon"><i class="fa-solid fa-building"></i></div>
                             <div class="dept-name">Finance</div>
                         </div>
                         <div class="drop-zone-content">
@@ -1143,7 +1164,7 @@
                     <!-- Operations Department -->
                     <div class="drop-zone" data-dept="operations">
                         <div class="drop-zone-header">
-                            <div class="dept-icon">Icon</div>
+                            <div class="dept-icon"><i class="fa-solid fa-building"></i></div>
                             <div class="dept-name">Operations</div>
                         </div>
                         <div class="drop-zone-content">
@@ -1154,7 +1175,7 @@
                     <!-- IT Department -->
                     <div class="drop-zone" data-dept="it">
                         <div class="drop-zone-header">
-                            <div class="dept-icon">Icon</div>
+                            <div class="dept-icon"><i class="fa-solid fa-building"></i></div>
                             <div class="dept-name">IT</div>
                         </div>
                         <div class="drop-zone-content">
@@ -1165,7 +1186,7 @@
                     <!-- HR Department -->
                     <div class="drop-zone" data-dept="hr">
                         <div class="drop-zone-header">
-                            <div class="dept-icon">Icon</div>
+                            <div class="dept-icon"><i class="fa-solid fa-building"></i></div>
                             <div class="dept-name">Human Resources</div>
                         </div>
                         <div class="drop-zone-content">
@@ -1176,7 +1197,7 @@
                     <!-- Marketing Department -->
                     <div class="drop-zone" data-dept="marketing">
                         <div class="drop-zone-header">
-                            <div class="dept-icon">Icon</div>
+                            <div class="dept-icon"><i class="fa-solid fa-building"></i></div>
                             <div class="dept-name">Marketing</div>
                         </div>
                         <div class="drop-zone-content">
@@ -1192,7 +1213,7 @@
                     <div class="area-title">Feedback Log</div>
                     <div id="feedbackLog">
                         <div class="feedback-item info">
-                            <span class="feedback-icon">Icon</span>
+                            <span class="feedback-icon"><i class="fa-solid fa-circle-info"></i></span>
                             <div class="feedback-content">
                                 <div class="feedback-title">Welcome to Round 1!</div>
                                 <div class="feedback-message">Assign each dataset to the correct department. Click "i" to view metadata.</div>
@@ -1218,7 +1239,7 @@
             <span class="metadata-close" onclick="closeMetadata()">×</span>
             
             <div class="metadata-header">
-                <div class="metadata-header-icon">Icon</div>
+                <div class="metadata-header-icon"><i class="fa-solid fa-database"></i></div>
                 <div class="metadata-header-info">
                     <h3 id="modalDatasetName">Sales Q4 2024</h3>
                     <p id="modalDatasetFile">sales_q4_2024.csv</p>
@@ -1374,7 +1395,12 @@ addFeedback('error', 'Incorrect!', `"${datasetName}" doesn't belong here.`);
             const feedbackLog = document.getElementById('feedbackLog');
             const feedbackItem = document.createElement('div');
             feedbackItem.className = `feedback-item ${type}`;
-            let icon = 'Icon';
+            let icon = '<i class="fa-solid fa-circle-info"></i>';
+            if (type === 'success') {
+                icon = '<i class="fa-solid fa-circle-check"></i>';
+            } else if (type === 'error') {
+                icon = '<i class="fa-solid fa-circle-xmark"></i>';
+            }
             feedbackItem.innerHTML = `
                 <span class="feedback-icon">${icon}</span>
                 <div class="feedback-content">

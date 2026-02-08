@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Level 1 - Reasoning Challenge (B&W Wireframe)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -39,6 +40,26 @@
             color: var(--white);
             min-height: 100vh;
         }
+
+        .timer-icon i,
+        .score-icon i,
+        .intro-icon i,
+        .stat-icon i,
+        .dataset-icon i,
+        .feedback-icon i,
+        .completion-icon i {
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .timer-icon i,
+        .score-icon i { font-size: 14px; }
+
+        .intro-icon i { font-size: 22px; }
+        .stat-icon i { font-size: 18px; }
+        .dataset-icon i { font-size: 16px; }
+        .feedback-icon i { font-size: 14px; }
+        .completion-icon i { font-size: 40px; }
 
         /* ==================== NAVIGATION ARROWS ==================== */
         .nav-arrow {
@@ -965,11 +986,11 @@
 
         <div class="header-right">
             <div class="timer-display">
-                <span class="timer-icon">Icon</span>
+                <span class="timer-icon"><i class="fa-solid fa-clock"></i></span>
                 <span class="timer-value" id="timer">10:30</span>
             </div>
             <div class="score-display">
-                <span class="score-icon">Icon</span>
+                <span class="score-icon"><i class="fa-solid fa-trophy"></i></span>
                 <span class="score-value" id="score">450</span>
             </div>
         </div>
@@ -991,7 +1012,7 @@
         
         <!-- INTRO SECTION -->
         <div class="intro-section">
-            <div class="intro-icon">Icon</div>
+            <div class="intro-icon"><i class="fa-solid fa-circle-check"></i></div>
             <div class="intro-title">Excellent Work on Dataset Placement!</div>
             <div class="intro-description">
                 Now it's time to demonstrate your understanding. For each dataset you placed, explain the reasoning 
@@ -999,21 +1020,21 @@
             </div>
             <div class="intro-stats">
                 <div class="stat-item">
-                    <div class="stat-icon">Icon</div>
+                    <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
                     <div class="stat-info">
                         <span class="stat-value">10</span>
                         <span class="stat-label">Datasets Placed</span>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">Icon</div>
+                    <div class="stat-icon"><i class="fa-solid fa-circle-question"></i></div>
                     <div class="stat-info">
                         <span class="stat-value">5</span>
                         <span class="stat-label">Questions to Answer</span>
                     </div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-icon">Icon</div>
+                    <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
                     <div class="stat-info">
                         <span class="stat-value">+100</span>
                         <span class="stat-label">Bonus Points</span>
@@ -1030,7 +1051,7 @@
                     <div class="question-number">1</div>
                     <div class="question-info">
                         <div class="dataset-reference">
-                            <span class="dataset-icon">Icon</span>
+                            <span class="dataset-icon"><i class="fa-solid fa-database"></i></span>
                             <span>Sales Q4 2024</span>
                         </div>
                         <div class="placement-info">
@@ -1088,7 +1109,7 @@
                     <div class="question-number">2</div>
                     <div class="question-info">
                         <div class="dataset-reference">
-                            <span class="dataset-icon">Icon</span>
+                            <span class="dataset-icon"><i class="fa-solid fa-database"></i></span>
                             <span>Customer Database</span>
                         </div>
                         <div class="placement-info">
@@ -1146,7 +1167,7 @@
                     <div class="question-number">3</div>
                     <div class="question-info">
                         <div class="dataset-reference">
-                            <span class="dataset-icon">Icon</span>
+                            <span class="dataset-icon"><i class="fa-solid fa-database"></i></span>
                             <span>Financial Reports</span>
                         </div>
                         <div class="placement-info">
@@ -1204,7 +1225,7 @@
                     <div class="question-number">4</div>
                     <div class="question-info">
                         <div class="dataset-reference">
-                            <span class="dataset-icon">Icon</span>
+                            <span class="dataset-icon"><i class="fa-solid fa-database"></i></span>
                             <span>IT Service Desk Tickets</span>
                         </div>
                         <div class="placement-info">
@@ -1262,7 +1283,7 @@
                     <div class="question-number">5</div>
                     <div class="question-info">
                         <div class="dataset-reference">
-                            <span class="dataset-icon">Icon</span>
+                            <span class="dataset-icon"><i class="fa-solid fa-database"></i></span>
                             <span>HR Employee Data</span>
                         </div>
                         <div class="placement-info">
@@ -1332,7 +1353,7 @@
     <!-- COMPLETION MODAL -->
     <div class="completion-modal" id="completionModal">
         <div class="completion-content">
-            <div class="completion-icon">Icon</div>
+            <div class="completion-icon"><i class="fa-solid fa-award"></i></div>
             <div class="completion-title">Round 1 Complete!</div>
             <div class="completion-message">
                 Excellent work! You've demonstrated strong understanding of data governance and organizational accountability. 
@@ -1407,7 +1428,7 @@ function updateProgress() {
                     selectedOption.classList.add('correct');
                     questionCard.classList.add('answered');
                     feedback.classList.add('show', 'correct');
-                    feedback.querySelector('.feedback-icon').textContent = '✓';
+                    feedback.querySelector('.feedback-icon').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
                     feedback.querySelector('.feedback-title').textContent = 'Correct!';
                     feedback.querySelector('.feedback-message').textContent = 'You correctly identified the key governance principle.';
                     
@@ -1417,7 +1438,7 @@ function updateProgress() {
                     selectedOption.classList.add('incorrect');
                     questionCard.classList.add('incorrect');
                     feedback.classList.add('show', 'incorrect');
-                    feedback.querySelector('.feedback-icon').textContent = '✗';
+                    feedback.querySelector('.feedback-icon').innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
                     feedback.querySelector('.feedback-title').textContent = 'Not Quite';
                     feedback.querySelector('.feedback-message').textContent = 'Review the metadata and data lineage.';
 }
