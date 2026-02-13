@@ -15,6 +15,19 @@
         }
         body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); min-height: 100vh; }
 
+        /* ==================== NAVIGATION ARROWS ==================== */
+        .nav-arrow {
+            position: fixed; top: 50%; transform: translateY(-50%);
+            width: 60px; height: 60px; background: var(--black); border: 3px solid var(--black);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s ease; z-index: 1000;
+            font-size: 24px; color: var(--white); text-decoration: none;
+        }
+        .nav-arrow:hover { background: var(--white); color: var(--black); transform: translateY(-50%) scale(1.1); }
+        .nav-arrow.right { right: 30px; }
+        .nav-arrow.left { left: 30px; }
+        .nav-arrow.disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+
         /* ==================== HEADER BAR ==================== */
         .header-bar {
             background: var(--white); border-bottom: 3px solid var(--black);
@@ -270,6 +283,8 @@
     </style>
 </head>
 <body>
+    <a href="1_level3_Intro_NoCNoI.html" class="nav-arrow left" title="Previous: Intro" aria-label="Previous page">←</a>
+    <a href="3_level3_GameplayTwo_NoCNoI.html" class="nav-arrow right" title="Next: Reasoning" aria-label="Next page">→</a>
     <!-- HEADER BAR -->
     <div class="header-bar">
         <div class="header-left">
@@ -497,9 +512,5 @@
         }
         updateProgress();
     </script>
-
-    <!-- NAVIGATION ARROWS -->
-    <a href="1_level3_Intro_NoCNoI.html" class="nav-arrow left" title="Previous">←</a>
-    <a href="3_level3_GameplayTwo_NoCNoI.html" class="nav-arrow right" title="Next">→</a>
 </body>
 </html>
