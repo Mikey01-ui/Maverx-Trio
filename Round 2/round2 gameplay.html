@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round 2 - Gameplay Screen (B&W Compact)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ==================== HEADER BAR ==================== */
+        .header-bar {
+            background: var(--white);
+            border-bottom: 2px solid var(--black);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid var(--black);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .player-avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--gray-800);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .player-name {
+            font-size: 11px;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .header-center {
+            text-align: center;
+        }
+
+        .round-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 2px;
+        }
+
+        .round-subtitle {
+            font-size: 9px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-display,
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 2px solid var(--black);
+            border-radius: 6px;
+            background: var(--gray-100);
+        }
+
+        .timer-label,
+        .score-label {
+            font-size: 9px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .timer-value,
+        .score-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            font-family: monospace;
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .main-container {
+            padding: 15px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* ==================== PROGRESS SECTION ==================== */
+        .progress-section {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 300px;
+            height: 12px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--black);
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            width: 40%;
+        }
+
+        .progress-count {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--black);
+            font-family: monospace;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .toggle-btn {
+            padding: 6px 12px;
+            border: 2px solid var(--gray-400);
+            background: var(--white);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover,
+        .toggle-btn.active {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        /* ==================== GAME LAYOUT ==================== */
+        .game-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 15px;
+        }
+
+        /* ==================== DASHBOARD AREA ==================== */
+        .dashboard-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            order: 2;
+        }
+
+        /* ==================== DASHBOARD AREA (PROPERTIES ABOVE) ==================== */
+
+        .dashboard-section {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .section-label {
+            position: absolute;
+            top: -8px;
+            left: 12px;
+            background: var(--black);
+            color: var(--white);
+            padding: 2px 8px;
+            font-size: 8px;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-300);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .drill-down-btn {
+            padding: 4px 10px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .drill-down-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* ==================== CHARTS GRID ==================== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .chart-container {
+            background: var(--white);
+            border: 2px solid var(--gray-400);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 220px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chart-container:hover {
+            border-color: var(--black);
+            box-shadow: 3px 3px 0px var(--gray-300);
+        }
+
+        .chart-container.selected {
+            border-color: var(--black);
+            border-width: 3px;
+            background: var(--gray-50);
+        }
+
+        .chart-header {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 170px;
+            position: relative;
+        }
+
+        /* ==================== BAR CHART ==================== */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 100%;
+            padding: 10px 0;
+            border-bottom: 2px solid var(--black);
+            border-left: 2px solid var(--black);
+            position: relative;
+        }
+
+        .bar {
+            width: 35px;
+            background: var(--black);
+            border: 2px solid var(--black);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .bar:hover {
+            background: var(--gray-700);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--gray-700);
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        /* ==================== LINE CHART ==================== */
+        .line-chart {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-bottom: 2px solid var(--black);
+            border-left: 2px solid var(--black);
+        }
+
+        .line-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ==================== SCATTER PLOT ==================== */
+        .scatter-plot {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border: 2px solid var(--black);
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 33px,
+                    var(--gray-200) 33px,
+                    var(--gray-200) 34px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 33px,
+                    var(--gray-200) 33px,
+                    var(--gray-200) 34px
+                );
+        }
+
+        .scatter-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--black);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .scatter-point:hover {
+            background: var(--white);
+            width: 12px;
+            height: 12px;
+        }
+
+        /* ==================== HEATMAP ==================== */
+        .heatmap {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 3px;
+        }
+
+        .heat-cell {
+            border: 1px solid var(--gray-400);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .heat-cell:hover {
+            border-color: var(--black);
+            border-width: 2px;
+        }
+
+        /* Different shades for heatmap */
+        .heat-cell.h1 { background: var(--gray-100); }
+        .heat-cell.h2 { background: var(--gray-200); }
+        .heat-cell.h3 { background: var(--gray-300); }
+        .heat-cell.h4 { background: var(--gray-500); }
+        .heat-cell.h5 { background: var(--gray-700); }
+        .heat-cell.h6 { background: var(--gray-900); }
+
+        /* ==================== DATA TABLE ==================== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 6px 8px;
+            text-align: left;
+            border: 1px solid var(--gray-300);
+        }
+
+        .data-table th {
+            background: var(--gray-800);
+            color: var(--white);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: var(--gray-100);
+        }
+
+        .data-table tr:hover {
+            background: var(--gray-200);
+        }
+
+        .anomaly {
+            background: var(--gray-300);
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            order: 1;
+        }
+
+        /* ==================== KPI SELECTION ==================== */
+        .kpi-section {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .kpi-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .kpi-option {
+            padding: 10px;
+            background: var(--white);
+            border: 2px solid var(--gray-400);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kpi-option:hover {
+            border-color: var(--black);
+            transform: translateX(3px);
+        }
+
+        .kpi-option.selected {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .kpi-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--gray-500);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .kpi-option.selected .kpi-checkbox {
+            background: var(--white);
+            border-color: var(--white);
+        }
+
+        .kpi-option.selected .kpi-checkbox::after {
+            content: 'X';
+            color: var(--black);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .kpi-text {
+            font-size: 11px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        /* ==================== TREND IDENTIFICATION ==================== */
+        .trend-section {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .trend-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .trend-item {
+            padding: 12px;
+            background: var(--gray-100);
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trend-item:hover {
+            border-color: var(--black);
+            background: var(--gray-200);
+        }
+
+        .trend-item.selected {
+            border-color: var(--black);
+            border-width: 3px;
+            background: var(--gray-800);
+            color: var(--white);
+        }
+
+        .trend-label {
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .trend-description {
+            font-size: 9px;
+            color: var(--gray-700);
+            line-height: 1.4;
+        }
+
+        .trend-item.selected .trend-description {
+            color: var(--gray-300);
+        }
+
+        /* ==================== FEEDBACK PANEL ==================== */
+        .feedback-panel {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 12px;
+            position: relative;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            padding: 8px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .feedback-item.success {
+            background: var(--gray-800);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .feedback-item.error {
+            background: var(--white);
+            border-style: double;
+            border-width: 3px;
+        }
+
+        .feedback-item.info {
+            background: var(--gray-100);
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .feedback-message {
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        /* ==================== METADATA PANEL ==================== */
+        .metadata-panel {
+            background: var(--gray-100);
+            border: 2px solid var(--gray-400);
+            border-radius: 8px;
+            padding: 12px;
+            position: relative;
+        }
+
+        .metadata-row {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .metadata-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .metadata-label {
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .metadata-value {
+            font-size: 10px;
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1400px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ==================== NAVIGATION ARROWS ==================== */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER BAR -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="player-info">
+                <div class="player-avatar">JD</div>
+                <div class="player-name">Player: John Doe</div>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="round-title">Round 2: Insight Hunter</div>
+            <div class="round-subtitle">Data Analysis & Trends</div>
+        </div>
+
+        <div class="header-right">
+            <div class="timer-display">
+                <span class="timer-label">Time:</span>
+                <span class="timer-value" id="timer">14:32</span>
+            </div>
+            <div class="score-display">
+                <span class="score-label">Score:</span>
+                <span class="score-value" id="score">650</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <!-- PROGRESS SECTION -->
+        <div class="progress-section">
+            <div class="progress-info">
+                <span class="progress-label">Analysis Progress:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+                <span class="progress-count"><span id="completed">2</span> / <span id="total">5</span> KPIs Selected</span>
+            </div>
+            <div class="view-toggle">
+                <button class="toggle-btn active">Chart View</button>
+                <button class="toggle-btn">Table View</button>
+            </div>
+        </div>
+
+        <!-- GAME LAYOUT -->
+        <div class="game-layout">
+            <!-- DASHBOARD AREA -->
+            <div class="dashboard-area">
+                <!-- INTERACTIVE CHARTS SECTION -->
+                <div class="dashboard-section">
+                    <div class="section-label">INTERACTIVE DASHBOARDS</div>
+                    <div class="section-header">
+                        <h3 class="section-title">Sales Performance Analysis</h3>
+                        <button class="drill-down-btn">Drill Down</button>
+                    </div>
+                    
+                    <div class="charts-grid">
+                        <!-- BAR CHART -->
+                        <div class="chart-container" onclick="selectChart(1)">
+                            <div class="chart-header">Revenue by Region (Q1-Q4)</div>
+                            <div class="chart-canvas">
+                                <div class="bar-chart">
+                                    <div class="bar" style="height: 45%;">
+                                        <span class="bar-value">2.4M</span>
+                                        <span class="bar-label">Q1</span>
+                                    </div>
+                                    <div class="bar" style="height: 70%;">
+                                        <span class="bar-value">2.8M</span>
+                                        <span class="bar-label">Q2</span>
+                                    </div>
+                                    <div class="bar" style="height: 55%;">
+                                        <span class="bar-value">3.1M</span>
+                                        <span class="bar-label">Q3</span>
+                                    </div>
+                                    <div class="bar" style="height: 85%;">
+                                        <span class="bar-value">3.5M</span>
+                                        <span class="bar-label">Q4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LINE CHART -->
+                        <div class="chart-container selected" onclick="selectChart(2)">
+                            <div class="chart-header">Monthly Growth Trend</div>
+                            <div class="chart-canvas">
+                                <div class="line-chart">
+                                    <svg viewBox="0 0 300 170" preserveAspectRatio="none">
+                                        <!-- Grid lines -->
+                                        <line x1="0" y1="42" x2="300" y2="42" stroke="#e0e0e0" stroke-width="1"/>
+                                        <line x1="0" y1="85" x2="300" y2="85" stroke="#e0e0e0" stroke-width="1"/>
+                                        <line x1="0" y1="127" x2="300" y2="127" stroke="#e0e0e0" stroke-width="1"/>
+                                        
+                                        <!-- Line graph -->
+                                        <polyline
+                                            points="0,140 50,120 100,100 150,90 200,70 250,50 300,30"
+                                            fill="none"
+                                            stroke="#000000"
+                                            stroke-width="3"
+                                        />
+                                        
+                                        <!-- Data points -->
+                                        <circle cx="0" cy="140" r="4" fill="#000000"/>
+                                        <circle cx="50" cy="120" r="4" fill="#000000"/>
+                                        <circle cx="100" cy="100" r="4" fill="#000000"/>
+                                        <circle cx="150" cy="90" r="4" fill="#000000"/>
+                                        <circle cx="200" cy="70" r="4" fill="#000000"/>
+                                        <circle cx="250" cy="50" r="4" fill="#000000"/>
+                                        <circle cx="300" cy="30" r="4" fill="#000000"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SCATTER PLOT -->
+                        <div class="chart-container" onclick="selectChart(3)">
+                            <div class="chart-header">Customer Acquisition vs LTV</div>
+                            <div class="chart-canvas">
+                                <div class="scatter-plot">
+                                    <div class="scatter-point" style="top: 20%; left: 15%;"></div>
+                                    <div class="scatter-point" style="top: 35%; left: 25%;"></div>
+                                    <div class="scatter-point" style="top: 45%; left: 40%;"></div>
+                                    <div class="scatter-point" style="top: 25%; left: 50%;"></div>
+                                    <div class="scatter-point" style="top: 60%; left: 35%;"></div>
+                                    <div class="scatter-point" style="top: 50%; left: 60%;"></div>
+                                    <div class="scatter-point" style="top: 30%; left: 70%;"></div>
+                                    <div class="scatter-point" style="top: 70%; left: 55%;"></div>
+                                    <div class="scatter-point" style="top: 40%; left: 80%;"></div>
+                                    <div class="scatter-point" style="top: 65%; left: 75%;"></div>
+                                    <div class="scatter-point" style="top: 55%; left: 45%;"></div>
+                                    <div class="scatter-point" style="top: 75%; left: 65%;"></div>
+                                    <div class="scatter-point" style="top: 80%; left: 85%;"></div>
+                                    <div class="scatter-point" style="top: 85%; left: 90%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HEATMAP -->
+                        <div class="chart-container" onclick="selectChart(4)">
+                            <div class="chart-header">Product Category Performance</div>
+                            <div class="chart-canvas">
+                                <div class="heatmap">
+                                    <div class="heat-cell h2"></div>
+                                    <div class="heat-cell h4"></div>
+                                    <div class="heat-cell h3"></div>
+                                    <div class="heat-cell h5"></div>
+                                    <div class="heat-cell h1"></div>
+                                    <div class="heat-cell h3"></div>
+                                    
+                                    <div class="heat-cell h5"></div>
+                                    <div class="heat-cell h3"></div>
+                                    <div class="heat-cell h6"></div>
+                                    <div class="heat-cell h2"></div>
+                                    <div class="heat-cell h4"></div>
+                                    <div class="heat-cell h1"></div>
+                                    
+                                    <div class="heat-cell h3"></div>
+                                    <div class="heat-cell h5"></div>
+                                    <div class="heat-cell h2"></div>
+                                    <div class="heat-cell h4"></div>
+                                    <div class="heat-cell h6"></div>
+                                    <div class="heat-cell h3"></div>
+                                    
+                                    <div class="heat-cell h1"></div>
+                                    <div class="heat-cell h2"></div>
+                                    <div class="heat-cell h4"></div>
+                                    <div class="heat-cell h3"></div>
+                                    <div class="heat-cell h2"></div>
+                                    <div class="heat-cell h5"></div>
+                                    
+                                    <div class="heat-cell h4"></div>
+                                    <div class="heat-cell h6"></div>
+                                    <div class="heat-cell h3"></div>
+                                    <div class="heat-cell h5"></div>
+                                    <div class="heat-cell h1"></div>
+                                    <div class="heat-cell h4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATA TABLE SECTION -->
+                <div class="dashboard-section">
+                    <div class="section-label">DATA TABLE VIEW</div>
+                    <div class="section-header">
+                        <h3 class="section-title">Detailed Regional Data</h3>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Region</th>
+                                <th>Q1 Revenue</th>
+                                <th>Q2 Revenue</th>
+                                <th>Q3 Revenue</th>
+                                <th>Q4 Revenue</th>
+                                <th>Growth %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>North America</td>
+                                <td>$2.4M</td>
+                                <td>$2.8M</td>
+                                <td>$3.1M</td>
+                                <td>$3.5M</td>
+                                <td>+45.8%</td>
+                            </tr>
+                            <tr>
+                                <td>Europe</td>
+                                <td>$1.8M</td>
+                                <td>$1.9M</td>
+                                <td>$2.0M</td>
+                                <td>$2.2M</td>
+                                <td>+22.2%</td>
+                            </tr>
+                            <tr class="anomaly">
+                                <td>Asia Pacific</td>
+                                <td>$1.2M</td>
+                                <td>$0.8M</td>
+                                <td>$1.5M</td>
+                                <td>$1.6M</td>
+                                <td>+33.3%</td>
+                            </tr>
+                            <tr>
+                                <td>Latin America</td>
+                                <td>$0.9M</td>
+                                <td>$1.0M</td>
+                                <td>$1.1M</td>
+                                <td>$1.3M</td>
+                                <td>+44.4%</td>
+                            </tr>
+                            <tr>
+                                <td>Middle East</td>
+                                <td>$0.6M</td>
+                                <td>$0.7M</td>
+                                <td>$0.8M</td>
+                                <td>$0.9M</td>
+                                <td>+50.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- METADATA PANEL -->
+                <div class="metadata-panel">
+                    <div class="section-label">DATASET METADATA</div>
+                    <div class="metadata-row">
+                        <div class="metadata-label">Data Source</div>
+                        <div class="metadata-value">Enterprise Data Warehouse - Sales Analytics Module</div>
+                    </div>
+                    <div class="metadata-row">
+                        <div class="metadata-label">Last Updated</div>
+                        <div class="metadata-value">January 28, 2025 - 14:30 UTC</div>
+                    </div>
+                    <div class="metadata-row">
+                        <div class="metadata-label">Data Quality</div>
+                        <div class="metadata-value">Validated - 98.5% Complete</div>
+                    </div>
+                    <div class="metadata-row">
+                        <div class="metadata-label">Known Issues</div>
+                        <div class="metadata-value">Asia Pacific Q2 data contains outlier - under investigation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <!-- KPI SELECTION -->
+                <div class="kpi-section">
+                    <div class="section-label">KPI SELECTION</div>
+                    <h3 class="kpi-title">Select Key KPIs</h3>
+                    <div class="kpi-options">
+                        <div class="kpi-option selected" onclick="toggleKPI(1)">
+                            <div class="kpi-checkbox"></div>
+                            <div class="kpi-text">Revenue Growth Rate</div>
+                        </div>
+                        <div class="kpi-option" onclick="toggleKPI(2)">
+                            <div class="kpi-checkbox"></div>
+                            <div class="kpi-text">Customer Acquisition Cost</div>
+                        </div>
+                        <div class="kpi-option selected" onclick="toggleKPI(3)">
+                            <div class="kpi-checkbox"></div>
+                            <div class="kpi-text">Regional Performance Variance</div>
+                        </div>
+                        <div class="kpi-option" onclick="toggleKPI(4)">
+                            <div class="kpi-checkbox"></div>
+                            <div class="kpi-text">Market Share Index</div>
+                        </div>
+                        <div class="kpi-option" onclick="toggleKPI(5)">
+                            <div class="kpi-checkbox"></div>
+                            <div class="kpi-text">Profit Margin Trend</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TREND IDENTIFICATION -->
+                <div class="trend-section">
+                    <div class="section-label">TREND IDENTIFICATION</div>
+                    <h3 class="kpi-title">Identify Trends</h3>
+                    <div class="trend-options">
+                        <div class="trend-item selected" onclick="toggleTrend(1)">
+                            <div class="trend-label">Upward Revenue Trend</div>
+                            <div class="trend-description">Consistent growth across all regions Q1-Q4</div>
+                        </div>
+                        <div class="trend-item" onclick="toggleTrend(2)">
+                            <div class="trend-label">Seasonal Fluctuation</div>
+                            <div class="trend-description">Q2 dip followed by Q3-Q4 recovery</div>
+                        </div>
+                        <div class="trend-item" onclick="toggleTrend(3)">
+                            <div class="trend-label">Regional Divergence</div>
+                            <div class="trend-description">Asia Pacific showing inconsistent pattern</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEEDBACK PANEL -->
+                <div class="feedback-panel">
+                    <div class="section-label">FEEDBACK LOG</div>
+                    <div class="feedback-item info">
+                        <div class="feedback-title">Welcome to Insight Hunter</div>
+                        <div class="feedback-message">Analyze the dashboards and select the correct KPIs and trends.</div>
+                    </div>
+                    <div class="feedback-item success">
+                        <div class="feedback-title">Correct KPI Selected</div>
+                        <div class="feedback-message">Revenue Growth Rate is a key indicator for this dataset.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedKPIs = 2;
+        let totalKPIs = 5;
+
+        function updateProgress() {
+            const percentage = (selectedKPIs / totalKPIs) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('completed').textContent = selectedKPIs;
+        }
+
+        function selectChart(chartId) {
+            const charts = document.querySelectorAll('.chart-container');
+            charts.forEach(chart => chart.classList.remove('selected'));
+            charts[chartId - 1].classList.add('selected');
+        }
+
+        function toggleKPI(kpiId) {
+            const option = event.currentTarget;
+            option.classList.toggle('selected');
+            selectedKPIs = document.querySelectorAll('.kpi-option.selected').length;
+            updateProgress();
+        }
+
+        function toggleTrend(trendId) {
+            const trend = event.currentTarget;
+            trend.classList.toggle('selected');
+        }
+
+        updateProgress();
+    </script>
+
+    <!-- ==================== NAVIGATION ARROWS ==================== -->
+    <a href="round2 intro.html" class="nav-arrow left" title="Previous">←</a>
+    <a href="round2 analytical-justification.html" class="nav-arrow right" title="Next">→</a>
+</body>
+</html>
