@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3 - Gameplay Screen (B&W Wireframe)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --black: #000000; --gray-900: #1a1a1a; --gray-800: #2d2d2d;
+            --gray-700: #404040; --gray-600: #666666; --gray-500: #808080;
+            --gray-400: #999999; --gray-300: #cccccc; --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0; --white: #ffffff;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); min-height: 100vh; }
+
+        /* ==================== HEADER BAR ==================== */
+        .header-bar {
+            background: var(--white); border-bottom: 3px solid var(--black);
+            padding: 20px 40px; display: flex; justify-content: space-between;
+            align-items: center; position: relative;
+        }
+        .header-bar::after {
+            content: 'HEADER BAR'; position: absolute; top: 5px; left: 50%;
+            transform: translateX(-50%); background: var(--black); color: var(--white);
+            padding: 2px 8px; font-size: 9px; font-weight: 700; border-radius: 2px;
+        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .player-info {
+            display: flex; align-items: center; gap: 12px;
+            border: 2px solid var(--black); padding: 8px 15px; border-radius: 8px;
+        }
+        .player-avatar {
+            width: 40px; height: 40px; background: var(--gray-800);
+            border: 2px solid var(--black); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 700; color: var(--white);
+        }
+        .player-name { font-size: 14px; color: var(--black); font-weight: 600; }
+        .header-center {
+            text-align: center; border: 2px dashed var(--gray-400);
+            padding: 10px 30px; border-radius: 8px;
+        }
+        .round-title { font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+        .round-subtitle { font-size: 11px; color: var(--gray-600); text-transform: uppercase; letter-spacing: 1px; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .timer-display, .score-display {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 20px; border: 2px solid var(--black);
+            border-radius: 8px; background: var(--gray-100);
+        }
+        .timer-icon, .score-icon { font-size: 11px; color: var(--gray-600); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .timer-value, .score-value { font-size: 18px; font-weight: 700; color: var(--black); }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .main-container { padding: 30px 40px; max-width: 1600px; margin: 0 auto; }
+
+        /* ==================== PROGRESS BAR ==================== */
+        .progress-section {
+            background: var(--gray-100); border: 2px solid var(--black);
+            border-radius: 12px; padding: 20px 30px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: relative;
+        }
+        .progress-section::before {
+            content: 'PROGRESS INDICATOR'; position: absolute; top: -10px; left: 20px;
+            background: var(--white); padding: 2px 8px; font-size: 9px; font-weight: 700;
+        }
+        .progress-info { display: flex; align-items: center; gap: 20px; }
+        .progress-label { font-size: 14px; color: var(--gray-700); font-weight: 600; }
+        .progress-bar-container {
+            width: 300px; height: 16px; background: var(--white);
+            border: 2px solid var(--black); border-radius: 20px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: var(--black); border-radius: 18px;
+            transition: width 0.5s ease; width: 25%;
+        }
+        .progress-count { font-size: 16px; font-weight: 700; color: var(--black); }
+        .hint-button {
+            padding: 10px 20px; background: var(--white); border: 2px solid var(--black);
+            border-radius: 8px; color: var(--black); font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+        }
+        .hint-button:hover { background: var(--black); color: var(--white); }
+        .hint-icon { font-size: 11px; color: var(--gray-600); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .hint-count { background: var(--black); color: var(--white); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+        .hint-button:hover .hint-count { background: var(--white); color: var(--black); }
+
+        /* ==================== GAME LAYOUT ==================== */
+        .game-layout { display: grid; grid-template-columns: 280px 1fr 300px; gap: 25px; min-height: 520px; }
+
+        /* ==================== DATASET CARDS AREA ==================== */
+        .datasets-area {
+            background: var(--gray-100); border: 2px solid var(--black);
+            border-radius: 12px; padding: 20px; position: relative;
+            display: flex; flex-direction: column; overflow-y: auto; max-height: 520px;
+        }
+        .datasets-area::before {
+            content: 'DATASET CARDS'; position: absolute; top: -10px; left: 15px;
+            background: var(--white); padding: 2px 8px; font-size: 9px; font-weight: 700;
+        }
+        .area-title {
+            font-size: 16px; font-weight: 700; color: var(--black);
+            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-300);
+        }
+        .dataset-card {
+            background: var(--white); border: 2px solid var(--black);
+            border-radius: 8px; padding: 12px 14px; margin-bottom: 10px;
+            cursor: grab; transition: all 0.2s ease;
+        }
+        .dataset-card:hover { box-shadow: 4px 4px 0px var(--black); transform: translateY(-2px); }
+        .dataset-card.dragging { opacity: 0.5; box-shadow: none; }
+        .dataset-card.locked { opacity: 0.4; cursor: default; border-style: dashed; }
+        .dataset-card-header { display: flex; align-items: center; gap: 10px; }
+        .dataset-icon {
+            width: 32px; height: 32px; background: var(--gray-100);
+            border: 2px solid var(--black); border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 8px; color: var(--gray-600); font-weight: 600; text-transform: uppercase; flex-shrink: 0;
+        }
+        .dataset-name { font-size: 13px; font-weight: 700; color: var(--black); flex: 1; }
+        .info-btn {
+            width: 26px; height: 26px; background: var(--gray-100);
+            border: 2px solid var(--black); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 12px; font-weight: 700; color: var(--black);
+            transition: all 0.2s ease; flex-shrink: 0;
+        }
+        .info-btn:hover { background: var(--black); color: var(--white); }
+
+        /* ==================== DROP ZONES ==================== */
+        .dropzones-area { position: relative; }
+        .dropzones-area::before {
+            content: 'ETHICAL DECISION ZONES'; position: absolute; top: -10px; left: 20px;
+            background: var(--white); padding: 2px 8px; font-size: 9px; font-weight: 700; z-index: 1;
+        }
+        .dropzones-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 15px; height: 100%; }
+        .drop-zone {
+            background: var(--gray-100); border: 2px dashed var(--gray-400);
+            border-radius: 12px; padding: 18px; transition: all 0.3s ease;
+            display: flex; flex-direction: column;
+        }
+        .drop-zone:hover { border-color: var(--gray-600); }
+        .drop-zone.drag-over { border-color: var(--black); border-style: solid; background: var(--gray-200); box-shadow: inset 0 0 0 3px var(--gray-300); }
+        .drop-zone-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-300);
+        }
+        .zone-icon {
+            width: 36px; height: 36px; background: var(--white);
+            border: 2px solid var(--black); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 8px; color: var(--gray-600); font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px; text-align: center;
+            line-height: 1.1; flex-shrink: 0;
+        }
+        .zone-name { font-size: 14px; font-weight: 700; color: var(--black); }
+        .zone-description { font-size: 10px; color: var(--gray-600); line-height: 1.3; }
+        .drop-zone-content { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .drop-zone-placeholder {
+            font-size: 12px; color: var(--gray-500); text-align: center;
+            padding: 15px; border: 1px dashed var(--gray-400); border-radius: 6px; margin-top: auto;
+        }
+        .dropped-dataset {
+            background: var(--white); border: 2px solid var(--black);
+            padding: 8px 12px; border-radius: 6px; font-size: 12px;
+            font-weight: 600; display: flex; align-items: center; gap: 8px;
+        }
+        .check-icon { font-weight: 700; }
+
+        /* ==================== FEEDBACK PANEL ==================== */
+        .feedback-area { display: flex; flex-direction: column; gap: 15px; }
+        .feedback-panel {
+            background: var(--gray-100); border: 2px solid var(--black);
+            border-radius: 12px; padding: 20px; position: relative;
+            flex: 1; overflow-y: auto; max-height: 400px;
+        }
+        .feedback-panel::before {
+            content: 'FEEDBACK LOG'; position: absolute; top: -10px; left: 15px;
+            background: var(--white); padding: 2px 8px; font-size: 9px; font-weight: 700;
+        }
+        .feedback-item {
+            display: flex; gap: 10px; padding: 10px; border-radius: 6px;
+            margin-bottom: 8px; border: 1px solid var(--gray-300); background: var(--white);
+        }
+        .feedback-item.success { border-left: 4px solid var(--black); }
+        .feedback-item.error { border-left: 4px solid var(--gray-500); border-style: dashed; border-left-style: solid; }
+        .feedback-item.info { border-left: 4px solid var(--gray-400); }
+        .feedback-icon {
+            width: 24px; height: 24px; display: flex; align-items: center;
+            justify-content: center; font-size: 9px; font-weight: 700;
+            border: 1px solid var(--gray-400); border-radius: 4px; flex-shrink: 0; color: var(--gray-600);
+        }
+        .feedback-content { flex: 1; }
+        .feedback-title { font-size: 12px; font-weight: 700; color: var(--black); margin-bottom: 3px; }
+        .feedback-message { font-size: 11px; color: var(--gray-700); line-height: 1.4; }
+
+        /* ==================== PROCEED PANEL ==================== */
+        .proceed-panel {
+            width: 100%; background: var(--white); border: 2px solid var(--black);
+            border-radius: 12px; padding: 16px; box-shadow: 6px 6px 0px var(--black);
+        }
+        .proceed-btn {
+            width: 100%; padding: 12px 14px; border: 2px solid var(--black);
+            border-radius: 8px; font-size: 14px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.6px;
+            background: var(--gray-300); color: var(--gray-700); cursor: not-allowed;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .proceed-btn.is-enabled { background: var(--black); color: var(--white); cursor: pointer; }
+        .proceed-btn.is-enabled:hover { background: var(--white); color: var(--black); }
+        .proceed-help { margin-top: 10px; font-size: 11px; color: var(--gray-700); line-height: 1.4; }
+
+        /* ==================== METADATA MODAL ==================== */
+        .metadata-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center;
+        }
+        .metadata-modal.active { display: flex; }
+        .metadata-content {
+            background: var(--white); border: 4px solid var(--black);
+            border-radius: 16px; padding: 35px; max-width: 550px; width: 90%;
+            position: relative; box-shadow: 10px 10px 0px var(--gray-300);
+        }
+        .metadata-content::before {
+            content: 'METADATA & PRIVACY PANEL'; position: absolute; top: -15px;
+            left: 50%; transform: translateX(-50%); background: var(--black);
+            color: var(--white); padding: 4px 16px; font-size: 10px; font-weight: 700; border-radius: 3px;
+        }
+        .metadata-close {
+            position: absolute; top: 15px; right: 20px; font-size: 24px;
+            cursor: pointer; color: var(--gray-600); font-weight: 700; transition: color 0.2s;
+        }
+        .metadata-close:hover { color: var(--black); }
+        .metadata-header {
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--gray-300);
+        }
+        .metadata-header-icon {
+            width: 50px; height: 50px; background: var(--gray-100);
+            border: 2px solid var(--black); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 700; color: var(--gray-600);
+        }
+        .metadata-header-info h3 { font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+        .metadata-header-info p { font-size: 12px; color: var(--gray-600); }
+        .metadata-row {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 12px 0; border-bottom: 1px solid var(--gray-200);
+        }
+        .metadata-label { font-size: 12px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px; min-width: 140px; }
+        .metadata-value { font-size: 13px; color: var(--black); text-align: right; flex: 1; }
+        .pii-badge {
+            display: inline-block; padding: 3px 10px; border: 2px solid var(--black);
+            border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase;
+            background: var(--gray-800); color: var(--white);
+        }
+        .pii-badge.none { background: var(--white); color: var(--gray-600); border-color: var(--gray-400); }
+        .legal-badge {
+            display: inline-block; padding: 3px 10px; border: 1px solid var(--gray-400);
+            border-radius: 4px; font-size: 10px; font-weight: 600; color: var(--gray-700);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1400px) { .game-layout { grid-template-columns: 260px 1fr 280px; } }
+        @media (max-width: 1200px) { .game-layout { grid-template-columns: 1fr; } .dropzones-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .header-bar { flex-direction: column; gap: 15px; } .dropzones-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <!-- HEADER BAR -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="player-info">
+                <div class="player-avatar">JD</div>
+                <div><div class="player-name">Player: John Doe</div></div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="round-title">Ethical Gatekeeper</div>
+            <div class="round-subtitle">Round 3 — Data Ethics & Privacy</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-display"><span class="timer-icon">Icon</span><span class="timer-value">14:32</span></div>
+            <div class="score-display"><span class="score-icon">Icon</span><span class="score-value">1,100</span></div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <div class="progress-section">
+            <div class="progress-info">
+                <span class="progress-label">Ethical Decisions:</span>
+                <div class="progress-bar-container"><div class="progress-bar-fill" id="progressBar"></div></div>
+                <span class="progress-count"><span id="completed">2</span>/8</span>
+            </div>
+            <button class="hint-button" onclick="showHint()">
+                <span class="hint-icon">Icon</span><span>Use Hint</span>
+                <span class="hint-count" id="hintCount">3</span>
+            </button>
+        </div>
+
+        <div class="game-layout">
+            <!-- LEFT: DATASET CARDS — clean, no sensitivity badges -->
+            <div class="datasets-area">
+                <div class="area-title">Datasets to Review</div>
+                <div class="dataset-card" draggable="true" data-id="1">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Patient Medical Records</div>
+                        <span class="info-btn" onclick="openMetadata(1)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="2">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Anonymized Clinical Trials</div>
+                        <span class="info-btn" onclick="openMetadata(2)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="3">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Employee Health Insurance</div>
+                        <span class="info-btn" onclick="openMetadata(3)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="4">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Patient Satisfaction Surveys</div>
+                        <span class="info-btn" onclick="openMetadata(4)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="5">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Hospital Operational Metrics</div>
+                        <span class="info-btn" onclick="openMetadata(5)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="6">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Genetic Testing Results</div>
+                        <span class="info-btn" onclick="openMetadata(6)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="7">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Prescription History Log</div>
+                        <span class="info-btn" onclick="openMetadata(7)">i</span>
+                    </div>
+                </div>
+                <div class="dataset-card" draggable="true" data-id="8">
+                    <div class="dataset-card-header">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-name">Staff Shift Schedules</div>
+                        <span class="info-btn" onclick="openMetadata(8)">i</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTER: ETHICAL DECISION ZONES -->
+            <div class="dropzones-area">
+                <div class="dropzones-grid">
+                    <div class="drop-zone" data-action="use-as-is">
+                        <div class="drop-zone-header">
+                            <div class="zone-icon">Icon</div>
+                            <div><div class="zone-name">Use As-Is</div><div class="zone-description">Data can be used without modification</div></div>
+                        </div>
+                        <div class="drop-zone-content"><div class="drop-zone-placeholder">Drop datasets here...</div></div>
+                    </div>
+                    <div class="drop-zone" data-action="anonymize">
+                        <div class="drop-zone-header">
+                            <div class="zone-icon">Icon</div>
+                            <div><div class="zone-name">Anonymize First</div><div class="zone-description">Remove or mask identifiable information</div></div>
+                        </div>
+                        <div class="drop-zone-content"><div class="drop-zone-placeholder">Drop datasets here...</div></div>
+                    </div>
+                    <div class="drop-zone" data-action="consent">
+                        <div class="drop-zone-header">
+                            <div class="zone-icon">Icon</div>
+                            <div><div class="zone-name">Consent Required</div><div class="zone-description">Explicit permission must be obtained</div></div>
+                        </div>
+                        <div class="drop-zone-content"><div class="drop-zone-placeholder">Drop datasets here...</div></div>
+                    </div>
+                    <div class="drop-zone" data-action="do-not-use">
+                        <div class="drop-zone-header">
+                            <div class="zone-icon">Icon</div>
+                            <div><div class="zone-name">Do Not Use</div><div class="zone-description">Data cannot be used under any circumstance</div></div>
+                        </div>
+                        <div class="drop-zone-content"><div class="drop-zone-placeholder">Drop datasets here...</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: FEEDBACK PANEL -->
+            <div class="feedback-area">
+                <div class="feedback-panel">
+                    <div class="area-title">Feedback Log</div>
+                    <div id="feedbackLog">
+                        <div class="feedback-item info">
+                            <span class="feedback-icon">Icon</span>
+                            <div class="feedback-content">
+                                <div class="feedback-title">Welcome to Round 3!</div>
+                                <div class="feedback-message">Each dataset looks the same on the surface. Click "i" to inspect privacy metadata before deciding. Don't guess — investigate.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="proceed-panel">
+                    <button class="proceed-btn" id="proceedBtn" type="button" disabled>Proceed to Next Phase</button>
+                    <div class="proceed-help">The button unlocks when all datasets are correctly assigned to their ethical action zones.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- METADATA MODAL -->
+    <div class="metadata-modal" id="metadataModal">
+        <div class="metadata-content">
+            <span class="metadata-close" onclick="closeMetadata()">×</span>
+            <div class="metadata-header">
+                <div class="metadata-header-icon">Icon</div>
+                <div class="metadata-header-info">
+                    <h3 id="modalDatasetName">Patient Medical Records</h3>
+                    <p id="modalDatasetFile">patient_records_2024.csv</p>
+                </div>
+            </div>
+            <div class="metadata-row"><span class="metadata-label">Data Source</span><div class="metadata-value" id="modalSource">MedVault EHR System</div></div>
+            <div class="metadata-row"><span class="metadata-label">Data Owner</span><div class="metadata-value" id="modalOwner">Dr. Karen Liu, Chief Medical Officer</div></div>
+            <div class="metadata-row"><span class="metadata-label">Contains PII</span><div class="metadata-value" id="modalPII"><span class="pii-badge">Yes — Names, SSN, DOB, Diagnoses</span></div></div>
+            <div class="metadata-row"><span class="metadata-label">Legal Basis</span><div class="metadata-value" id="modalLegal"><span class="legal-badge">Vital Interest / Legal Obligation</span></div></div>
+            <div class="metadata-row"><span class="metadata-label">Retention Policy</span><div class="metadata-value" id="modalRetention">10 years minimum — regulated by healthcare law</div></div>
+            <div class="metadata-row"><span class="metadata-label">Description</span><div class="metadata-value" id="modalDescription">Complete patient medical records including diagnoses, treatment plans, medication history, and personal identifiers. Subject to strict healthcare privacy regulations.</div></div>
+        </div>
+    </div>
+
+    <script>
+        let completedDatasets = 2;
+        const totalDatasets = 8;
+        let hintsRemaining = 3;
+        const correctActions = {
+            1: 'do-not-use', 2: 'use-as-is', 3: 'consent',
+            4: 'anonymize', 5: 'use-as-is', 6: 'do-not-use',
+            7: 'anonymize', 8: 'consent'
+        };
+        let phaseIsComplete = false;
+        const proceedBtn = document.getElementById('proceedBtn');
+        function setProceedEnabled(e){if(!proceedBtn)return;proceedBtn.disabled=!e;proceedBtn.classList.toggle('is-enabled',e);}
+        function proceedToNextPhase(){alert('Going to reasoning phase...');}
+        if(proceedBtn){proceedBtn.addEventListener('click',proceedToNextPhase);}
+        function updateProgress(){
+            const p=(completedDatasets/totalDatasets)*100;const c=completedDatasets>=totalDatasets;
+            document.getElementById('progressBar').style.width=p+'%';
+            document.getElementById('completed').textContent=completedDatasets;
+            setProceedEnabled(c);
+            if(c&&!phaseIsComplete){phaseIsComplete=true;addFeedback('success','Compliance Approved!','All datasets correctly handled. You may proceed.');}
+        }
+        const datasetCards=document.querySelectorAll('.dataset-card');
+        const dropZones=document.querySelectorAll('.drop-zone');
+        let draggedElement=null;
+        datasetCards.forEach(card=>{
+            card.addEventListener('dragstart',function(e){if(this.classList.contains('locked'))return;draggedElement=this;this.classList.add('dragging');});
+            card.addEventListener('dragend',function(){this.classList.remove('dragging');});
+        });
+        dropZones.forEach(zone=>{
+            zone.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('drag-over');});
+            zone.addEventListener('dragleave',function(){this.classList.remove('drag-over');});
+            zone.addEventListener('drop',function(e){
+                e.preventDefault();this.classList.remove('drag-over');if(!draggedElement)return;
+                const id=draggedElement.getAttribute('data-id');const action=this.getAttribute('data-action');
+                const name=draggedElement.querySelector('.dataset-name').textContent;
+                if(correctActions[id]===action){
+                    const dc=this.querySelector('.drop-zone-content');const ph=dc.querySelector('.drop-zone-placeholder');if(ph)ph.remove();
+                    const d=document.createElement('div');d.className='dropped-dataset';d.innerHTML=`<span class="check-icon">✓</span> ${name}`;dc.appendChild(d);
+                    draggedElement.classList.add('locked');draggedElement.setAttribute('draggable','false');
+                    completedDatasets++;updateProgress();addFeedback('success','Correct!',`"${name}" — ethical action validated.`);
+                }else{addFeedback('error','Incorrect!',`"${name}" — review the metadata and reconsider.`);}
+            });
+        });
+        function addFeedback(t,ti,m){
+            const fl=document.getElementById('feedbackLog');const fi=document.createElement('div');fi.className=`feedback-item ${t}`;
+            fi.innerHTML=`<span class="feedback-icon">Icon</span><div class="feedback-content"><div class="feedback-title">${ti}</div><div class="feedback-message">${m}</div></div>`;
+            fl.insertBefore(fi,fl.firstChild);
+        }
+        function openMetadata(id){document.getElementById('metadataModal').classList.add('active');}
+        function closeMetadata(){document.getElementById('metadataModal').classList.remove('active');}
+        function showHint(){
+            if(hintsRemaining<=0){addFeedback('error','No Hints Left','You have used all available hints.');return;}
+            hintsRemaining--;document.getElementById('hintCount').textContent=hintsRemaining;
+            addFeedback('info','Hint','Check "Contains PII" and "Legal Basis" — they reveal the required action.');
+        }
+        updateProgress();
+    </script>
+
+    <!-- NAVIGATION ARROWS -->
+    <a href="1_level3_Intro_NoCNoI.html" class="nav-arrow left" title="Previous">←</a>
+    <a href="3_level3_GameplayTwo_NoCNoI.html" class="nav-arrow right" title="Next">→</a>
+</body>
+</html>
