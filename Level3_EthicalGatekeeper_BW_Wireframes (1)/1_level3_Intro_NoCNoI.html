@@ -69,6 +69,12 @@
             left: 30px;
         }
 
+        .nav-arrow.disabled {
+            opacity: 0.35;
+            cursor: default;
+            pointer-events: none;
+        }
+
         /* ==================== MAIN CONTAINER ==================== */
         .intro-container {
             max-width: 1200px;
@@ -554,6 +560,8 @@
     </style>
 </head>
 <body>
+    <a href="#" class="nav-arrow left disabled" title="Previous" aria-label="Previous page">←</a>
+    <a href="2_level3_GameplayOne_NoCNoI.html" class="nav-arrow right" title="Next: Gameplay" aria-label="Next page">→</a>
     <div class="intro-container">
         <!-- HEADER SECTION -->
         <div class="header-section">
@@ -702,7 +710,7 @@
                 Ready to prove your data ethics expertise?
             </p>
             
-            <button class="start-button" onclick="goToGameplay()">
+            <button class="start-button" onclick="startRound()">
                 <span>Start Round 3</span>
                 <span class="start-icon">→</span>
             </button>
@@ -711,12 +719,9 @@
         </div>
     </div>
 
-    <!-- NAVIGATION ARROWS -->
-    <a href="2_level3_GameplayOne_NoCNoI.html" class="nav-arrow right" title="Next">→</a>
-
     <script>
-        function goToGameplay() {
-            window.location.href = '2_level3_GameplayOne_NoCNoI.html';
+        function startRound() {
+            alert('Starting Round 3...');
         }
 
         window.addEventListener('load', function() {
