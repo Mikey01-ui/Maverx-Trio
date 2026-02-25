@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Briefing - THE DATA HEIST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #00f3ff;
+            --electric-purple: #bf00ff;
+            --toxic-green: #39ff14;
+            --deep-black: #0a0e27;
+            --dark-navy: #1a1f3a;
+            --cyber-gray: #2a2f4a;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--deep-black);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 10;
+            animation: scanlineMove 8s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Main Container */
+        .briefing-container {
+            position: relative;
+            z-index: 5;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 20px;
+        }
+
+        /* Header */
+        .briefing-header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mission-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-blue),
+                0 0 40px var(--neon-blue);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .mission-subtitle {
+            font-size: 14px;
+            color: var(--toxic-green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ACE Briefing Panel */
+        .ace-briefing {
+            background: rgba(26, 31, 58, 0.95);
+            border: 3px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 
+                0 0 30px rgba(0, 243, 255, 0.5),
+                inset 0 0 30px rgba(0, 243, 255, 0.1);
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Corner decorations */
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--toxic-green);
+        }
+        .corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        .ace-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .ace-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--toxic-green);
+            overflow: hidden;
+            box-shadow: 0 0 15px var(--toxic-green);
+        }
+
+        .ace-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ace-info h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            margin-bottom: 2px;
+        }
+
+        .ace-info p {
+            font-size: 11px;
+            color: var(--toxic-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .briefing-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 12px;
+        }
+
+        .briefing-text strong {
+            color: var(--toxic-green);
+            font-weight: 700;
+        }
+
+        /* Mission Stats */
+        .mission-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: rgba(0, 243, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(0, 243, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3);
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--toxic-green);
+            text-shadow: 0 0 15px var(--toxic-green);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Security Layers Section */
+        .layers-section {
+            margin-bottom: 25px;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-align: center;
+            margin-bottom: 18px;
+            text-shadow: 0 0 15px var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .layers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .layer-card {
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .layer-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 243, 255, 0.4);
+            border-color: var(--toxic-green);
+        }
+
+        .layer-number {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: var(--toxic-green);
+            color: var(--deep-black);
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(57, 255, 20, 0.4);
+        }
+
+        .layer-icon {
+            font-size: 36px;
+            text-align: center;
+            margin: 8px 0;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .layer-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .layer-subtitle {
+            font-size: 11px;
+            color: var(--toxic-green);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .layer-description {
+            font-size: 12px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        /* Start Button */
+        .start-section {
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out 0.9s backwards;
+        }
+
+        .warning-text {
+            font-size: 12px;
+            color: var(--electric-purple);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-button {
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 16px 40px;
+            background: var(--toxic-green);
+            border: 3px solid var(--toxic-green);
+            border-radius: 10px;
+            color: var(--deep-black);
+            cursor: pointer;
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.6),
+                0 5px 0 #1a8007;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 30px rgba(57, 255, 20, 0.6),
+                    0 8px 0 #1a8007;
+            }
+            50% {
+                box-shadow: 
+                    0 0 50px rgba(57, 255, 20, 0.9),
+                    0 8px 0 #1a8007;
+            }
+        }
+
+        .start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 0 50px rgba(57, 255, 20, 0.9),
+                0 13px 0 #1a8007;
+        }
+
+        .start-button:active {
+            transform: translateY(3px);
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.6),
+                0 3px 0 #1a8007;
+        }
+
+        /* Audio Toggle */
+        .audio-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 3px solid var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            font-size: 28px;
+        }
+
+        .audio-toggle:hover {
+            background: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 30px var(--neon-blue);
+            transform: scale(1.1);
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--electric-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            color: var(--electric-purple);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--electric-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--electric-purple);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .nav-left {
+            left: 15px;
+        }
+
+        .nav-right {
+            right: 15px;
+        }
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--electric-purple);
+            border-radius: 25px;
+            color: var(--electric-purple);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: var(--electric-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--electric-purple);
+            transform: scale(1.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .briefing-container {
+                padding: 15px 12px;
+            }
+
+            .mission-title {
+                font-size: 28px;
+            }
+
+            .mission-subtitle {
+                font-size: 12px;
+            }
+
+            .ace-briefing {
+                padding: 15px;
+            }
+
+            .briefing-text {
+                font-size: 13px;
+            }
+
+            .layers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .start-button {
+                font-size: 14px;
+                padding: 12px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="grid-background"></div>
+    <div class="scanlines"></div>
+
+    <!-- ==================== AUDIO ELEMENTS ==================== -->
+    
+    <!-- BACKGROUND MUSIC: Briefing room theme -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="../Assets/cyberpunk.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Controls -->
+    <a href="landingpage.html" class="back-button"><i class="fas fa-arrow-left"></i> BACK</a>
+    
+    <div class="audio-toggle" onclick="toggleAudio()" title="Toggle Sound">
+        <i class="fas fa-volume-high" id="audioIcon"></i>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <a href="landingpage.html" class="nav-arrow nav-left" title="Previous Page">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <a href="round1_intro.html" class="nav-arrow nav-right" title="Next Page">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+
+    <!-- Main Container -->
+    <div class="briefing-container">
+        <!-- Header -->
+        <div class="briefing-header">
+            <h1 class="mission-title">MISSION BRIEFING</h1>
+            <p class="mission-subtitle">Operation: Data Vault</p>
+        </div>
+
+        <!-- ACE Briefing -->
+        <div class="ace-briefing">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+
+            <div class="ace-header">
+                <div class="ace-avatar">
+                    <img src="https://image2url.com/r2/default/images/1771929895096-50b385f4-ed6b-4ea4-941f-ff41baea509b.png" alt="ACE">
+                </div>
+                <div class="ace-info">
+                    <h2>ACE</h2>
+                    <p>Heist Mastermind</p>
+                </div>
+            </div>
+
+            <div class="briefing-text">
+                Alright team, listen up. What I'm about to show you is the biggest score of our careers. 
+                <strong>MegaCorp's central vault</strong> holds the world's most valuable dataset - complete user profiles, 
+                predictive algorithms, market secrets that governments would kill for.
+            </div>
+
+            <div class="briefing-text">
+                But here's the thing: this isn't a smash-and-grab. The vault is protected by <strong>five layers 
+                of cutting-edge security</strong>, each one designed to stop even the most sophisticated attacks. 
+                We need to be SMART. We need to understand their data systems inside and out.
+            </div>
+
+            <div class="briefing-text">
+                You've got <strong>60 minutes</strong> from the moment we breach Layer 1 until the whole place 
+                goes into lockdown. One mistake and we all go down. But if we pull this off? We're legends.
+            </div>
+
+            <!-- Mission Stats -->
+            <div class="mission-stats">
+                <div class="stat-card">
+                    <span class="stat-value">5</span>
+                    <span class="stat-label">Security Layers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">60</span>
+                    <span class="stat-label">Minutes</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">50+</span>
+                    <span class="stat-label">Challenges</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">1</span>
+                    <span class="stat-label">Shot</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Layers -->
+        <div class="layers-section">
+            <h2 class="section-title">The Five Security Layers</h2>
+            
+            <div class="layers-grid">
+                <!-- Layer 1 -->
+                <div class="layer-card">
+                    <div class="layer-number">LAYER 1</div>
+                    <div class="layer-icon"><i class="fas fa-diagram-project"></i></div>
+                    <h3 class="layer-title">THE BLUEPRINTS</h3>
+                    <p class="layer-subtitle">Data Governance</p>
+                    <p class="layer-description">
+                        Map the vault layout by matching datasets to departments. 
+                        Understand who owns what before we move in.
+                    </p>
+                </div>
+
+                <!-- Layer 2 -->
+                <div class="layer-card">
+                    <div class="layer-number">LAYER 2</div>
+                    <div class="layer-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="layer-title">SURVEILLANCE</h3>
+                    <p class="layer-subtitle">Data Analysis</p>
+                    <p class="layer-description">
+                        Analyze their dashboards and financial data. 
+                        Find patterns, weak spots, and the best time to strike.
+                    </p>
+                </div>
+
+                <!-- Layer 3 -->
+                <div class="layer-card">
+                    <div class="layer-number">LAYER 3</div>
+                    <div class="layer-icon"><i class="fas fa-lock"></i></div>
+                    <h3 class="layer-title">THE MOLE</h3>
+                    <p class="layer-subtitle">Data Ethics</p>
+                    <p class="layer-description">
+                        An insider offers sensitive data. Decide what's safe to use 
+                        without triggering internal alarms.
+                    </p>
+                </div>
+
+                <!-- Layer 4 -->
+                <div class="layer-card">
+                    <div class="layer-number">LAYER 4</div>
+                    <div class="layer-icon"><i class="fas fa-arrows-spin"></i></div>
+                    <h3 class="layer-title">DISABLE ALARMS</h3>
+                    <p class="layer-subtitle">Data Flows</p>
+                    <p class="layer-description">
+                        Map how data moves through their systems. 
+                        Find the clean path that won't trigger security.
+                    </p>
+                </div>
+
+                <!-- Layer 5 -->
+                <div class="layer-card">
+                    <div class="layer-number">LAYER 5</div>
+                    <div class="layer-icon"><i class="fas fa-gem"></i></div>
+                    <h3 class="layer-title">THE SCORE</h3>
+                    <p class="layer-subtitle">Decision Communication</p>
+                    <p class="layer-description">
+                        Present the plan to the crew. Choose the right visuals 
+                        and build a story that convinces everyone this will work.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Section -->
+        <div class="start-section">
+            <p class="warning-text"><i class="fas fa-triangle-exclamation"></i> POINT OF NO RETURN <i class="fas fa-triangle-exclamation"></i></p>
+            <button class="start-button" onclick="startMission()">
+                <i class="fas fa-play"></i> BEGIN OPERATION
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUDIO SYSTEM ====================
+        let audioEnabled = true;
+        const sounds = {
+            bg: document.getElementById('bgMusic')
+        };
+
+        // Auto-start music
+        sounds.bg.play().catch(() => {
+            audioEnabled = false;
+            document.getElementById('audioIcon').classList.remove('fa-volume-high');
+            document.getElementById('audioIcon').classList.add('fa-volume-xmark');
+        });
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('audioIcon');
+            if (audioEnabled) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+                sounds.bg.play().catch(e => console.log('Audio play failed'));
+            } else {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+                sounds.bg.pause();
+            }
+        }
+
+        function playSound(type) {
+            if (audioEnabled && sounds[type]) {
+                sounds[type].currentTime = 0;
+                sounds[type].play().catch(e => console.log('Audio play failed'));
+            }
+        }
+
+        // ==================== NAVIGATION ====================
+        function startMission() {
+            // Add dramatic effect
+            document.querySelector('.start-button').innerHTML = '<i class="fas fa-spinner fa-spin"></i> INITIALIZING...';
+            document.querySelector('.start-button').disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = 'round1_intro.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

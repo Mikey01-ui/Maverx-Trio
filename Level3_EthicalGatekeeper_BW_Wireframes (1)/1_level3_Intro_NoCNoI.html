@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3 - Round Introduction (B&W Wireframe)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Grayscale palette */
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ==================== NAVIGATION ARROWS ==================== */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        .nav-arrow.disabled {
+            opacity: 0.35;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .intro-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 40px;
+        }
+
+        /* ==================== HEADER SECTION ==================== */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 40px;
+            border-bottom: 3px solid var(--black);
+            position: relative;
+        }
+
+        .header-section::after {
+            content: 'HEADER SECTION';
+            position: absolute;
+            top: 0;
+            right: 20px;
+            background: var(--gray-600);
+            color: var(--white);
+            padding: 4px 12px;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 3px;
+        }
+
+        .round-number {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .round-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .round-subtitle {
+            font-size: 20px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .round-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            margin: 30px auto 0;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .round-icon::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 3px dashed var(--gray-400);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== MAIN CONTENT GRID ==================== */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        /* ==================== SCENARIO SECTION ==================== */
+        .scenario-section {
+            background: var(--gray-100);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            padding: 35px;
+            position: relative;
+        }
+
+        .scenario-section::before {
+            content: 'SCENARIO & BACKGROUND STORY';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            margin-bottom: 20px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+            padding: 4px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 15px;
+        }
+
+        .scenario-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-700);
+            margin-bottom: 20px;
+        }
+
+        .scenario-highlight {
+            background: var(--white);
+            border-left: 4px solid var(--black);
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .highlight-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .highlight-text {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        /* ==================== OBJECTIVES SECTION ==================== */
+        .objectives-section {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            padding: 35px;
+            position: relative;
+        }
+
+        .objectives-section::before {
+            content: 'LEARNING OBJECTIVES';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--gray-600);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .objectives-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .objective-item {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .objective-number {
+            width: 36px;
+            height: 36px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .objective-content {
+            flex: 1;
+        }
+
+        .objective-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+
+        .objective-description {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        /* ==================== INSTRUCTIONS SECTION ==================== */
+        .instructions-section {
+            background: var(--gray-100);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .instructions-section::before {
+            content: 'HOW TO PLAY';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .instruction-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+            text-align: center;
+        }
+
+        .instruction-step {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 14px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .instruction-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            margin: 15px auto 15px;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        .instruction-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .instruction-text {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        /* ==================== PREVIEW SECTION ==================== */
+        .preview-section {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 35px;
+            border: 3px solid var(--gray-300);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .preview-section::before {
+            content: 'CHALLENGE PREVIEW';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-600);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .preview-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 10px;
+        }
+
+        .preview-description {
+            font-size: 15px;
+            color: var(--gray-700);
+            margin-bottom: 30px;
+        }
+
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-preview-item {
+            background: var(--gray-100);
+            border: 2px solid var(--gray-300);
+            border-radius: 10px;
+            padding: 20px 15px;
+        }
+
+        .stat-preview-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border: 2px solid var(--gray-400);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            margin: 0 auto 10px;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        .stat-preview-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* ==================== ACTION SECTION ==================== */
+        .action-section {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .ready-message {
+            font-size: 18px;
+            color: var(--gray-700);
+            margin-bottom: 25px;
+        }
+
+        .start-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 50px;
+            background: var(--black);
+            color: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .start-icon {
+            font-size: 22px;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+            border: 2px solid var(--gray-400);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .instructions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .round-title {
+                font-size: 36px;
+            }
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-container > * {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .header-section { animation-delay: 0.1s; }
+        .content-grid { animation-delay: 0.2s; }
+        .instructions-section { animation-delay: 0.3s; }
+        .preview-section { animation-delay: 0.4s; }
+        .action-section { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <a href="#" class="nav-arrow left disabled" title="Previous" aria-label="Previous page">←</a>
+    <a href="2_level3_GameplayOne_NoCNoI.html" class="nav-arrow right" title="Next: Gameplay" aria-label="Next page">→</a>
+    <div class="intro-container">
+        <!-- HEADER SECTION -->
+        <div class="header-section">
+            <div class="round-number">Round 3 of 5</div>
+            <h1 class="round-title">Ethical Gatekeeper</h1>
+            <p class="round-subtitle">Data Ethics &amp; Privacy</p>
+            <div class="round-icon">Icon<br>Placeholder</div>
+        </div>
+
+        <!-- MAIN CONTENT GRID -->
+        <div class="content-grid">
+            <!-- SCENARIO SECTION -->
+            <div class="scenario-section">
+                <div class="section-icon">Icon</div>
+                <h2 class="section-title">The Challenge</h2>
+                
+                <p class="scenario-text">
+                    You&#x27;ve been brought in as a Data Privacy Consultant at MedVault Health, a growing healthcare organization. A recent audit has revealed that several datasets containing patient and employee information are being used across departments without proper privacy assessments.
+                </p>
+
+                <p class="scenario-text">
+                    Your task is to evaluate each dataset&#x27;s sensitivity, inspect its privacy metadata, and determine the correct ethical action. Some data can be used freely, while other datasets require anonymization, explicit consent, or must not be used at all.
+                </p>
+
+                <div class="scenario-highlight">
+                    <div class="highlight-title">Your Mission</div>
+                    <div class="highlight-text">
+                        Review 8 datasets with varying sensitivity levels. Inspect their privacy metadata, assess legal and ethical constraints, and assign each dataset to the correct ethical action zone. Only compliant decisions will allow you to progress.
+                    </div>
+                </div>
+            </div>
+
+            <!-- OBJECTIVES SECTION -->
+            <div class="objectives-section">
+                <div class="section-icon">Icon</div>
+                <h2 class="section-title">Learning Objectives</h2>
+                
+                <ul class="objectives-list">
+                    <li class="objective-item">
+                        <div class="objective-number">1</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Recognize Sensitive Data</div>
+                            <div class="objective-description">
+                                Identify datasets that contain personal, sensitive, or regulated information requiring special handling.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">2</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Assess Privacy Constraints</div>
+                            <div class="objective-description">
+                                Evaluate legal basis, consent requirements, and retention policies before making data usage decisions.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">3</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Apply Privacy Principles</div>
+                            <div class="objective-description">
+                                Practice consent, data minimization, anonymization, and purpose limitation in realistic scenarios.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">4</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Make Ethical Decisions Under Pressure</div>
+                            <div class="objective-description">
+                                Weigh risks and interpret regulations to make responsible, ethics-driven decisions with time constraints.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- INSTRUCTIONS SECTION -->
+        <div class="instructions-section">
+            <h2 class="section-title">How to Play</h2>
+            
+            <div class="instructions-grid">
+                <div class="instruction-card">
+                    <div class="instruction-step">Step 1</div>
+                    <div class="instruction-icon">Icon</div>
+                    <div class="instruction-title">Inspect Privacy Metadata</div>
+                    <div class="instruction-text">
+                        Click on each dataset card to review sensitivity level, PII indicators, legal basis, and retention policies.
+                    </div>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-step">Step 2</div>
+                    <div class="instruction-icon">Icon</div>
+                    <div class="instruction-title">Drag to Decision Zone</div>
+                    <div class="instruction-text">
+                        Drag each dataset to the correct ethical action: Use as-is, Anonymize, Consent Required, or Do Not Use.
+                    </div>
+                </div>
+
+                <div class="instruction-card">
+                    <div class="instruction-step">Step 3</div>
+                    <div class="instruction-icon">Icon</div>
+                    <div class="instruction-title">Justify Your Reasoning</div>
+                    <div class="instruction-text">
+                        After placement, answer ethical reasoning questions to prove your understanding of privacy principles.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISUAL CHALLENGE PREVIEW -->
+        <div class="preview-section">
+            <h2 class="preview-title">What You'll Be Working With</h2>
+            <p class="preview-description">
+                Dataset Cards → Privacy Metadata Review → Ethical Action Assignment
+            </p>
+
+            <div class="stats-preview">
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-label">Time Challenge</div>
+                </div>
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-label">Points System</div>
+                </div>
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-label">Hints Available</div>
+                </div>
+                <div class="stat-preview-item">
+                    <div class="stat-preview-icon">Icon</div>
+                    <div class="stat-preview-label">Real-time Feedback</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTION SECTION -->
+        <div class="action-section">
+            <p class="ready-message">
+                Ready to prove your data ethics expertise?
+            </p>
+            
+            <button class="start-button" onclick="startRound()">
+                <span>Start Round 3</span>
+                <span class="start-icon">→</span>
+            </button>
+
+            <div class="difficulty-badge">Difficulty: Advanced</div>
+        </div>
+    </div>
+
+    <script>
+        function startRound() {
+            alert('Starting Round 3...');
+        }
+
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.intro-container > *');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+</html>

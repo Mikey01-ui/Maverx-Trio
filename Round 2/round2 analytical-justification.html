@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round 2 - Analytical Justification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header-bar {
+            background: var(--white);
+            border-bottom: 2px solid var(--black);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid var(--black);
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: var(--gray-100);
+        }
+
+        .player-avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--black);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .player-name {
+            font-size: 11px;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .header-center {
+            text-align: center;
+            flex: 1;
+        }
+
+        .round-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            letter-spacing: -0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .timer-display,
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            background: var(--gray-100);
+        }
+
+        .timer-label,
+        .score-label {
+            font-size: 9px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .timer-value,
+        .score-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            font-family: monospace;
+            min-width: 35px;
+        }
+
+        /* ==================== INSTRUCTION BAR ==================== */
+        .instruction-bar {
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==================== PROGRESS ==================== */
+        .progress-section {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            gap: 20px;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-700);
+            white-space: nowrap;
+        }
+
+        .progress-bar-wrapper {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--black);
+            transition: width 0.5s ease;
+        }
+
+        .progress-counter {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--black);
+            white-space: nowrap;
+            min-width: 60px;
+        }
+
+        /* ==================== QUESTION SECTION ==================== */
+        .question-section {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .question-header {
+            border-bottom: 2px solid var(--gray-300);
+            padding-bottom: 12px;
+        }
+
+        .question-counter {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--black);
+            line-height: 1.5;
+        }
+
+        /* ==================== ANSWER OPTIONS ==================== */
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .answer-option {
+            padding: 14px 14px;
+            background: var(--white);
+            border: 2px solid var(--gray-400);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .answer-option:hover:not(.disabled) {
+            border-color: var(--black);
+            transform: translateX(4px);
+        }
+
+        .answer-option.selected {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+            border-width: 3px;
+            font-weight: 600;
+        }
+
+        .answer-option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .option-label {
+            background: transparent;
+            border: 1px solid currentColor;
+            border-radius: 3px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .answer-option.selected .option-label {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        /* ==================== BUTTON SECTION ==================== */
+        .button-section {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+            margin-top: 12px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ==================== SCROLLBAR ==================== */
+        .answer-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .answer-options::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 3px;
+        }
+
+        .answer-options::-webkit-scrollbar-thumb {
+            background: var(--gray-500);
+            border-radius: 3px;
+        }
+
+        .answer-options::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-700);
+        }
+
+        /* ==================== FEEDBACK SECTION ==================== */
+        .feedback-section {
+            background: var(--gray-800);
+            color: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            padding: 10px 12px;
+            margin-top: 10px;
+            font-size: 10px;
+            line-height: 1.4;
+            display: none;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feedback-message {
+            font-size: 9px;
+            line-height: 1.3;
+        }
+
+        .answer-option.correct {
+            background: #2d5016;
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .answer-option.incorrect {
+            background: #5a1a1a;
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        /* ==================== NAVIGATION ARROWS ==================== */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .header-bar {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .header-center {
+                width: 100%;
+                order: 3;
+            }
+
+            .main-container {
+                padding: 12px;
+            }
+
+            .question-section {
+                padding: 12px;
+            }
+
+            .question-text {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="player-info">
+                <div class="player-avatar">JD</div>
+                <div class="player-name">Player: John Doe</div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="round-title">Round 2: Insight Hunter - Analytical Justification</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-display">
+                <span class="timer-label">TIME:</span>
+                <span class="timer-value" id="timer">15:00</span>
+            </div>
+            <div class="score-display">
+                <span class="score-label">SCORE:</span>
+                <span class="score-value" id="score">650</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTRUCTION BAR -->
+    <div class="instruction-bar">
+        Read each question carefully and select the best explanation for your analytical choices
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        <!-- PROGRESS -->
+        <div class="progress-section">
+            <div class="progress-container">
+                <span class="progress-label">Progress:</span>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progressBar" style="width: 33%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-counter">
+                <span id="currentQuestion">1</span> / <span id="totalQuestions">3</span>
+            </div>
+        </div>
+
+        <!-- QUESTION SECTION -->
+        <div class="question-section">
+            <div class="question-header">
+                <div class="question-counter">Analytical Justification: Question <span id="qNum">1</span></div>
+                <div class="question-text" id="questionText">Why is Revenue Growth Rate an important KPI for analyzing this dataset?</div>
+            </div>
+
+            <div class="answer-options" id="answerOptions">
+                <!-- Options will be populated by JavaScript -->
+            </div>
+
+            <!-- FEEDBACK SECTION -->
+            <div class="feedback-section" id="feedbackSection">
+                <div class="feedback-title" id="feedbackTitle">Correct!</div>
+                <div class="feedback-message" id="feedbackMessage">Good explanation for your analytical choice.</div>
+            </div>
+
+            <!-- BUTTON SECTION -->
+            <div class="button-section">
+                <button class="nav-btn" id="prevBtn" onclick="prevQuestion()" disabled>← Previous</button>
+                <button class="nav-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION ARROWS -->
+    <a href="round2 gameplay.html" class="nav-arrow left" title="Previous">←</a>
+    <a href="round2 completion.html" class="nav-arrow right" title="Next">→</a>
+
+    <script>
+        const questions = [
+            {
+                text: "Why is Revenue Growth Rate an important KPI for analyzing this dataset?",
+                options: [
+                    { label: "A", text: "It measures how quickly the company is expanding its revenue base across all regions" },
+                    { label: "B", text: "It shows customer satisfaction levels in different markets" },
+                    { label: "C", text: "It indicates the cost of acquiring new customers" },
+                    { label: "D", text: "It represents the profit margin trend over time" }
+                ],
+                correct: 0,
+                feedback: "Revenue Growth Rate directly measures business expansion velocity across multiple regions, which is critical for assessing overall business health."
+            },
+            {
+                text: "What is the primary insight gained from Regional Performance Variance?",
+                options: [
+                    { label: "A", text: "It identifies regional market differences and emerging growth opportunities or risk areas" },
+                    { label: "B", text: "It shows the total revenue across all regions combined" },
+                    { label: "C", text: "It measures employee productivity in each office location" },
+                    { label: "D", text: "It determines the target market size for new products" }
+                ],
+                correct: 0,
+                feedback: "Understanding regional variance helps identify which markets are performing well and which need strategic attention or resource reallocation."
+            },
+            {
+                text: "Why is the Upward Revenue Trend significant for strategic decision-making?",
+                options: [
+                    { label: "A", text: "Consistent Q1-Q4 growth demonstrates sustained business momentum and market validation" },
+                    { label: "B", text: "It shows a decline in customer acquisition costs" },
+                    { label: "C", text: "It indicates seasonal patterns requiring inventory adjustment" },
+                    { label: "D", text: "It reflects fluctuations in employee headcount" }
+                ],
+                correct: 0,
+                feedback: "A sustained upward trend validates that the business model is working effectively and provides confidence for strategic expansion decisions."
+            },
+            {
+                text: "How would you justify selecting KPIs over raw revenue figures?",
+                options: [
+                    { label: "A", text: "KPIs provide normalized, comparable metrics that reveal underlying business trends more clearly" },
+                    { label: "B", text: "Raw revenue figures are outdated and no longer relevant" },
+                    { label: "C", text: "KPIs are more difficult to calculate and therefore more valuable" },
+                    { label: "D", text: "Raw revenue is only useful for accounting purposes" }
+                ],
+                correct: 0,
+                feedback: "KPIs normalize data and provide actionable insights, whereas raw figures alone don't reveal the efficiency, growth rate, or regional performance variations."
+            },
+            {
+                text: "What analytical reasoning supports identifying Q2 as a turning point?",
+                options: [
+                    { label: "A", text: "Q2 marks where growth acceleration increases significantly from previous quarter baseline" },
+                    { label: "B", text: "Q2 is simply the middle quarter of the year" },
+                    { label: "C", text: "Q2 always shows higher numbers by definition" },
+                    { label: "D", text: "The pattern changes but there's no analytical significance" }
+                ],
+                correct: 0,
+                feedback: "Q2 represents a visible inflection point where the growth rate accelerates beyond Q1 levels, indicating a shift in market dynamics or business effectiveness."
+            },
+            {
+                text: "How do trend patterns inform risk assessment?",
+                options: [
+                    { label: "A", text: "Consistent upward trends reduce risk assumptions while volatile trends suggest market instability" },
+                    { label: "B", text: "Trends have no connection to risk assessment" },
+                    { label: "C", text: "Only downward trends indicate risk" },
+                    { label: "D", text: "Risk is only assessed through external market data" }
+                ],
+                correct: 0,
+                feedback: "Internal trend consistency indicates business execution reliability, while volatility signals operational or market challenges requiring risk mitigation."
+            },
+            {
+                text: "Why is comparative analysis between regions essential?",
+                options: [
+                    { label: "A", text: "It reveals which regions are outperforming and uncovers best practices for scaling" },
+                    { label: "B", text: "All regions perform identically" },
+                    { label: "C", text: "Regional data is irrelevant to strategy" },
+                    { label: "D", text: "Comparative analysis adds complexity without value" }
+                ],
+                correct: 0,
+                feedback: "Regional comparison identifies high-performing markets where strategies succeed, enabling replication and resource optimization across underperforming areas."
+            },
+            {
+                text: "What does consistent quarter-over-quarter growth indicate about business health?",
+                options: [
+                    { label: "A", text: "The business model is sustainable and market conditions are favorable" },
+                    { label: "B", text: "Growth is unpredictable and unreliable" },
+                    { label: "C", text: "The company is at risk of collapse" },
+                    { label: "D", text: "Market conditions are unfavorable" }
+                ],
+                correct: 0,
+                feedback: "Sustained sequential growth demonstrates effective execution, market demand, and operational scalability—key indicators of a healthy, growing business."
+            },
+            {
+                text: "How would variation in regional performance guide capital allocation?",
+                options: [
+                    { label: "A", text: "Invest more in underperforming regions to unlock potential and shift resources away from saturated markets" },
+                    { label: "B", text: "Allocate equally to all regions regardless of performance" },
+                    { label: "C", text: "Only invest in already-successful regions" },
+                    { label: "D", text: "Regional performance has no impact on budgeting" }
+                ],
+                correct: 0,
+                feedback: "Strategic capital allocation uses regional variance to identify high-potential areas for growth investment and mature markets for optimization."
+            },
+            {
+                text: "What justifies your conclusion about the overall business trajectory?",
+                options: [
+                    { label: "A", text: "Multiple convergent indicators—growth rate, regional strength, and trend consistency—all point to positive momentum" },
+                    { label: "B", text: "A single quarter of growth is sufficient evidence" },
+                    { label: "C", text: "Conclusions require external market predictions" },
+                    { label: "D", text: "Regional differences contradict the growth narrative" }
+                ],
+                correct: 0,
+                feedback: "Strong analytical conclusions require converging evidence from multiple metrics: sustained growth, regional strength, and consistent trends all validate positive business trajectory."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let answered = false;
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('currentQuestion').textContent = currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = questions.length;
+            
+            const progressPercent = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+
+            const optionsContainer = document.getElementById('answerOptions');
+            optionsContainer.innerHTML = '';
+            answered = false;
+
+            q.options.forEach((option, idx) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'answer-option' + (answers[currentQuestion] === idx ? ' selected' : '');
+                optionDiv.innerHTML = `
+                    <div class="option-label">${option.label}</div>
+                    <div class="option-text">${option.text}</div>
+                `;
+                optionDiv.onclick = () => selectAnswer(idx, optionDiv, option.label);
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            document.getElementById('feedbackSection').classList.remove('show');
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Submit' : 'Next →';
+        }
+
+        function selectAnswer(idx, element, answer) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentQuestion];
+            const isCorrect = idx === q.correct;
+            answers[currentQuestion] = idx;
+
+            document.querySelectorAll('.answer-option').forEach(opt => opt.classList.add('disabled'));
+            element.classList.remove('disabled');
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                document.getElementById('feedbackTitle').textContent = '✓ Correct!';
+                document.getElementById('feedbackMessage').textContent = q.feedback;
+            } else {
+                element.classList.add('incorrect');
+                document.getElementById('feedbackTitle').textContent = '✗ Incorrect';
+                document.getElementById('feedbackMessage').textContent = `The correct answer is ${q.options[q.correct].label}. ${q.feedback}`;
+            }
+
+            document.getElementById('feedbackSection').classList.add('show');
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion === questions.length - 1) {
+                window.location.href = 'round2 completion.html';
+            } else {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>

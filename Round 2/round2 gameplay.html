@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round 2 - Insight Hunter (Gameplay)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+            --success: #2d5016;
+            --error: #5a1a1a;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header-bar {
+            background: var(--white);
+            border-bottom: 2px solid var(--black);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid var(--black);
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: var(--gray-100);
+        }
+
+        .player-avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--black);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .player-name {
+            font-size: 11px;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .header-center {
+            text-align: center;
+            flex: 1;
+        }
+
+        .round-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            letter-spacing: -0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .timer-display,
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            background: var(--gray-100);
+        }
+
+        .timer-label,
+        .score-label {
+            font-size: 9px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .timer-value,
+        .score-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            font-family: monospace;
+            min-width: 35px;
+        }
+
+        /* ==================== INSTRUCTION BAR ==================== */
+        .instruction-bar {
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==================== PROGRESS ==================== */
+        .progress-section {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            gap: 20px;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-700);
+            white-space: nowrap;
+        }
+
+        .progress-bar-wrapper {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--black);
+            transition: width 0.5s ease;
+        }
+
+        .progress-counter {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--black);
+            white-space: nowrap;
+            min-width: 60px;
+        }
+
+        /* ==================== CONTENT GRID ==================== */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* ==================== CHART SECTION ==================== */
+        .chart-section {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .chart-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-subtitle {
+            font-size: 10px;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .chart-container {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            border-left: 2px solid var(--black);
+            border-bottom: 2px solid var(--black);
+            padding: 12px 8px 50px 8px;
+            min-height: 200px;
+            position: relative;
+        }
+
+        .bar {
+            width: 45px;
+            background: var(--black);
+            border: 2px solid var(--black);
+            position: relative;
+            transition: all 0.3s ease;
+            min-height: 20px;
+        }
+
+        .bar:hover {
+            background: var(--gray-700);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--gray-700);
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--black);
+            white-space: nowrap;
+        }
+
+        .chart-info {
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 12px;
+            background: var(--gray-100);
+            font-size: 9px;
+            line-height: 1.5;
+            color: var(--gray-700);
+        }
+
+        /* ==================== QUESTION SECTION ==================== */
+        .question-section {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 0;
+        }
+
+        .question-header {
+            border-bottom: 2px solid var(--gray-300);
+            padding-bottom: 12px;
+        }
+
+        .question-counter {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .question-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--black);
+            line-height: 1.5;
+        }
+
+        /* ==================== ANSWER OPTIONS ==================== */
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .answer-option {
+            padding: 14px 14px;
+            background: var(--white);
+            border: 2px solid var(--gray-400);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .answer-option:hover:not(.disabled) {
+            border-color: var(--black);
+            transform: translateX(4px);
+        }
+
+        .answer-option.selected {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+            border-width: 3px;
+            font-weight: 600;
+        }
+
+        .answer-option.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--black);
+            border-width: 2px;
+        }
+
+        .answer-option.incorrect {
+            background: var(--error);
+            color: var(--white);
+            border-color: var(--black);
+            border-width: 2px;
+        }
+
+        .answer-option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .option-label {
+            background: transparent;
+            border: 1px solid currentColor;
+            border-radius: 3px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .answer-option.selected .option-label {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        /* ==================== FEEDBACK ==================== */
+        .feedback-section {
+            background: var(--gray-800);
+            color: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            padding: 8px 10px;
+            margin-top: 10px;
+            font-size: 9px;
+            line-height: 1.4;
+            display: none;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .feedback-message {
+            font-size: 8px;
+            line-height: 1.3;
+        }
+
+        /* ==================== BUTTON ==================== */
+        .button-section {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+            margin-top: 12px;
+        }
+
+        .next-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .next-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ==================== SCROLLBAR ==================== */
+        .answer-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .answer-options::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 3px;
+        }
+
+        .answer-options::-webkit-scrollbar-thumb {
+            background: var(--gray-500);
+            border-radius: 3px;
+        }
+
+        .answer-options::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-700);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .progress-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .progress-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .header-center {
+                width: 100%;
+                order: 3;
+            }
+
+            .round-title {
+                font-size: 16px;
+            }
+
+            .main-container {
+                padding: 12px;
+            }
+
+            .progress-section {
+                padding: 10px 12px;
+                margin-bottom: 12px;
+            }
+
+            .content-grid {
+                gap: 12px;
+            }
+
+            .chart-section,
+            .question-section {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="player-info">
+                <div class="player-avatar">JD</div>
+                <div class="player-name">Player: John Doe</div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="round-title">Round 2: Insight Hunter</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-display">
+                <span class="timer-label">TIME:</span>
+                <span class="timer-value" id="timer">15:00</span>
+            </div>
+            <div class="score-display">
+                <span class="score-label">SCORE:</span>
+                <span class="score-value" id="score">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTRUCTION BAR -->
+    <div class="instruction-bar">
+        Look at the chart, read the question, and select the best answer from the options below
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        <!-- PROGRESS -->
+        <div class="progress-section">
+            <div class="progress-container">
+                <span class="progress-label">Progress:</span>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="progressBar" style="width: 10%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-counter">
+                <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+            </div>
+        </div>
+
+        <!-- CONTENT GRID -->
+        <div class="content-grid">
+            <!-- CHART SECTION -->
+            <div class="chart-section">
+                <div class="chart-title" id="chartTitle">Regional Sales Performance - Q1 to Q4 2024</div>
+                <div class="chart-subtitle" id="chartSubtitle">Revenue in millions of dollars by quarter</div>
+                <div class="chart-container" id="chartArea">
+                    <div class="bar" style="height: 45%;">
+                        <span class="bar-value">$2.4M</span>
+                        <span class="bar-label">Q1</span>
+                    </div>
+                    <div class="bar" style="height: 57%;">
+                        <span class="bar-value">$2.8M</span>
+                        <span class="bar-label">Q2</span>
+                    </div>
+                    <div class="bar" style="height: 63%;">
+                        <span class="bar-value">$3.1M</span>
+                        <span class="bar-label">Q3</span>
+                    </div>
+                    <div class="bar" style="height: 71%;">
+                        <span class="bar-value">$3.5M</span>
+                        <span class="bar-label">Q4</span>
+                    </div>
+                </div>
+                <div class="chart-info">
+                    This bar chart shows total revenue for each quarter of 2024. Each bar represents 3 months of sales data combined. Higher bars mean more revenue during that period.
+                </div>
+            </div>
+
+            <!-- QUESTION SECTION -->
+            <div class="question-section">
+                <div class="question-header">
+                    <div class="question-counter">QUESTION <span id="qNum">1</span> OF <span id="qTotal">10</span></div>
+                    <div class="question-text" id="questionText">Based on the chart above, which quarter had the highest revenue?</div>
+                </div>
+
+                <div class="answer-options" id="optionsContainer">
+                    <div class="answer-option" onclick="selectAnswer(this, 'A')">
+                        <div class="option-label">A</div>
+                        <div class="option-text">Quarter 1 (January - March)</div>
+                    </div>
+                    <div class="answer-option" onclick="selectAnswer(this, 'B')">
+                        <div class="option-label">B</div>
+                        <div class="option-text">Quarter 2 (April - June)</div>
+                    </div>
+                    <div class="answer-option" onclick="selectAnswer(this, 'C')">
+                        <div class="option-label">C</div>
+                        <div class="option-text">Quarter 3 (July - September)</div>
+                    </div>
+                    <div class="answer-option" onclick="selectAnswer(this, 'D')">
+                        <div class="option-label">D</div>
+                        <div class="option-text">Quarter 4 (October - December)</div>
+                    </div>
+                </div>
+
+                <div class="feedback-section" id="feedbackSection">
+                    <div class="feedback-title" id="feedbackTitle">Correct!</div>
+                    <div class="feedback-message" id="feedbackMessage">Q4 had the highest revenue at $3.5M, showing strong year-end performance.</div>
+                </div>
+
+                <div class="button-section">
+                    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ DATA -->
+    <script>
+        const quizData = [
+            {
+                chartTitle: "Regional Sales Performance - Q1 to Q4 2024",
+                chartSubtitle: "Revenue in millions of dollars by quarter",
+                chartData: [
+                    { label: "Q1", value: "$2.4M", height: "45%" },
+                    { label: "Q2", value: "$2.8M", height: "57%" },
+                    { label: "Q3", value: "$3.1M", height: "63%" },
+                    { label: "Q4", value: "$3.5M", height: "71%" }
+                ],
+                chartInfo: "This bar chart shows total revenue for each quarter of 2024. Each bar represents 3 months of sales data combined. Higher bars mean more revenue during that period.",
+                question: "Based on the chart above, which quarter had the highest revenue?",
+                options: [
+                    { label: "A", text: "Quarter 1 (January - March)" },
+                    { label: "B", text: "Quarter 2 (April - June)" },
+                    { label: "C", text: "Quarter 3 (July - September)" },
+                    { label: "D", text: "Quarter 4 (October - December)" }
+                ],
+                correctAnswer: "D",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Q4 had the highest revenue at $3.5M, showing strong year-end performance."
+            },
+            {
+                chartTitle: "Regional Revenue Comparison",
+                chartSubtitle: "Revenue by geography",
+                chartData: [
+                    { label: "North America", value: "$3.5M", height: "70%" },
+                    { label: "Europe", value: "$2.2M", height: "44%" },
+                    { label: "Asia Pacific", value: "$1.6M", height: "32%" },
+                    { label: "Other", value: "$0.9M", height: "18%" }
+                ],
+                chartInfo: "Regional breakdown shows market performance across different geographic areas. Larger markets indicate stronger sales presence.",
+                question: "Which region had the second-highest revenue?",
+                options: [
+                    { label: "A", text: "Asia Pacific" },
+                    { label: "B", text: "Europe" },
+                    { label: "C", text: "North America" },
+                    { label: "D", text: "Other regions" }
+                ],
+                correctAnswer: "B",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Europe generated $2.2M in revenue, making it the second-largest market after North America's $3.5M."
+            },
+            {
+                chartTitle: "Monthly Revenue Trend - 2024",
+                chartSubtitle: "Millions of dollars across 12 months",
+                chartData: [
+                    { label: "Jan", value: "$0.8M", height: "35%" },
+                    { label: "Feb", value: "$0.85M", height: "37%" },
+                    { label: "Mar", value: "$0.75M", height: "33%" },
+                    { label: "Apr", value: "$0.95M", height: "42%" }
+                ],
+                chartInfo: "This chart tracks monthly revenue progression throughout 2024. Notice the patterns and fluctuations month by month.",
+                question: "What trend is most evident in the early months of 2024?",
+                options: [
+                    { label: "A", text: "Consistent decline from January to March" },
+                    { label: "B", text: "Steady growth with minor fluctuations" },
+                    { label: "C", text: "Dramatic spike in February" },
+                    { label: "D", text: "Complete stagnation" }
+                ],
+                correctAnswer: "B",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Early 2024 shows steady growth with minor fluctuations, demonstrating market stability and gradual upward momentum."
+            },
+            {
+                chartTitle: "Product Category Performance - 2024",
+                chartSubtitle: "Revenue by product line",
+                chartData: [
+                    { label: "Software", value: "$4.2M", height: "84%" },
+                    { label: "Hardware", value: "$2.8M", height: "56%" },
+                    { label: "Services", value: "$1.9M", height: "38%" },
+                    { label: "Support", value: "$0.8M", height: "16%" }
+                ],
+                chartInfo: "Software products dominate the revenue stream, accounting for more than half of total sales. This reflects market demand for digital solutions.",
+                question: "Which product category generated the most revenue?",
+                options: [
+                    { label: "A", text: "Hardware" },
+                    { label: "B", text: "Services" },
+                    { label: "C", text: "Software" },
+                    { label: "D", text: "Support" }
+                ],
+                correctAnswer: "C",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Software generated $4.2M, significantly outperforming other product categories and demonstrating strong customer demand."
+            },
+            {
+                chartTitle: "Customer Satisfaction by Region - 2024",
+                chartSubtitle: "Satisfaction score (0-100)",
+                chartData: [
+                    { label: "North America", value: "92", height: "92%" },
+                    { label: "Europe", value: "85", height: "85%" },
+                    { label: "Asia Pacific", value: "78", height: "78%" },
+                    { label: "Other", value: "80", height: "80%" }
+                ],
+                chartInfo: "North America shows the highest customer satisfaction, while Asia Pacific has lower scores, indicating potential improvement areas.",
+                question: "Which region has the lowest customer satisfaction score?",
+                options: [
+                    { label: "A", text: "North America" },
+                    { label: "B", text: "Europe" },
+                    { label: "C", text: "Asia Pacific" },
+                    { label: "D", text: "Other regions" }
+                ],
+                correctAnswer: "C",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Asia Pacific has a satisfaction score of 78, the lowest among all regions. This suggests a need for improved service delivery in that area."
+            },
+            {
+                chartTitle: "Market Growth Rate by Segment - 2024",
+                chartSubtitle: "Year-over-year growth percentage",
+                chartData: [
+                    { label: "Enterprise", value: "23%", height: "69%" },
+                    { label: "Mid-Market", value: "32%", height: "96%" },
+                    { label: "SMB", value: "18%", height: "54%" },
+                    { label: "Startup", value: "15%", height: "45%" }
+                ],
+                chartInfo: "Mid-market segment shows the highest growth rate at 32%, while enterprise and SMB segments show slower growth trajectories.",
+                question: "Which market segment had the highest growth rate?",
+                options: [
+                    { label: "A", text: "Enterprise" },
+                    { label: "B", text: "Mid-Market" },
+                    { label: "C", text: "SMB" },
+                    { label: "D", text: "Startup" }
+                ],
+                correctAnswer: "B",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Mid-Market achieved 32% growth, outpacing all other segments and representing the strongest growth opportunity for 2024."
+            },
+            {
+                chartTitle: "Operating Expenses Trend - 2024",
+                chartSubtitle: "Monthly spending in millions",
+                chartData: [
+                    { label: "Q1", value: "$1.2M", height: "48%" },
+                    { label: "Q2", value: "$1.5M", height: "60%" },
+                    { label: "Q3", value: "$1.8M", height: "72%" },
+                    { label: "Q4", value: "$2.1M", height: "84%" }
+                ],
+                chartInfo: "Operating expenses show a consistent upward trend throughout 2024, reflecting business expansion and increased operational activities.",
+                question: "Which quarter had the lowest operating expenses?",
+                options: [
+                    { label: "A", text: "Q1" },
+                    { label: "B", text: "Q2" },
+                    { label: "C", text: "Q3" },
+                    { label: "D", text: "Q4" }
+                ],
+                correctAnswer: "A",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Q1 had the lowest operating expenses at $1.2M, while costs increased each subsequent quarter as the business scaled up."
+            },
+            {
+                chartTitle: "Employee Productivity Metrics - 2024",
+                chartSubtitle: "Revenue per employee (in thousands)",
+                chartData: [
+                    { label: "Sales Team", value: "$450K", height: "75%" },
+                    { label: "Engineering", value: "$380K", height: "63%" },
+                    { label: "Operations", value: "$320K", height: "53%" },
+                    { label: "Support", value: "$280K", height: "47%" }
+                ],
+                chartInfo: "Sales team generates the highest revenue per employee, while support team shows lower productivity metrics, suggesting potential optimization opportunities.",
+                question: "Which team has the lowest revenue per employee?",
+                options: [
+                    { label: "A", text: "Sales Team" },
+                    { label: "B", text: "Engineering" },
+                    { label: "C", text: "Operations" },
+                    { label: "D", text: "Support" }
+                ],
+                correctAnswer: "D",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Support team has $280K revenue per employee, the lowest among all departments. This may reflect the indirect revenue nature of support roles."
+            },
+            {
+                chartTitle: "Market Share Comparison - 2024",
+                chartSubtitle: "Percentage of total market",
+                chartData: [
+                    { label: "Our Company", value: "18%", height: "72%" },
+                    { label: "Competitor A", value: "22%", height: "88%" },
+                    { label: "Competitor B", value: "15%", height: "60%" },
+                    { label: "Others", value: "45%", height: "100%" }
+                ],
+                chartInfo: "Our company holds 18% market share, placing it second among named competitors but still behind the leading competitor.",
+                question: "What is our company's market share?",
+                options: [
+                    { label: "A", text: "15%" },
+                    { label: "B", text: "18%" },
+                    { label: "C", text: "22%" },
+                    { label: "D", text: "45%" }
+                ],
+                correctAnswer: "B",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "Our company has 18% market share in 2024, positioning us as a strong competitor though still below the leading competitor's 22%."
+            },
+            {
+                chartTitle: "Customer Churn Rate by Cohort - 2024",
+                chartSubtitle: "Annual churn percentage",
+                chartData: [
+                    { label: "2022 Cohort", value: "12%", height: "48%" },
+                    { label: "2023 Cohort", value: "18%", height: "72%" },
+                    { label: "2024 Q1", value: "22%", height: "88%" },
+                    { label: "2024 Q2", value: "8%", height: "32%" }
+                ],
+                chartInfo: "Newer cohorts show higher churn rates, which is typical for recently acquired customers. 2022 cohort shows stable, low churn of 12%.",
+                question: "Which customer cohort has the lowest churn rate?",
+                options: [
+                    { label: "A", text: "2022 Cohort" },
+                    { label: "B", text: "2023 Cohort" },
+                    { label: "C", text: "2024 Q1" },
+                    { label: "D", text: "2024 Q2" }
+                ],
+                correctAnswer: "A",
+                feedbackTitle: "Correct!",
+                feedbackMessage: "The 2022 cohort has the lowest churn rate at 12%, indicating strong long-term customer retention from our earliest acquired customer group."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion(index) {
+            if (index >= quizData.length) {
+                window.location.href = "round2 completion.html";
+                return;
+            }
+
+            const question = quizData[index];
+            answered = false;
+
+            // Update progress
+            document.getElementById('currentQuestion').textContent = index + 1;
+            document.getElementById('totalQuestions').textContent = quizData.length;
+            document.getElementById('qNum').textContent = index + 1;
+            document.getElementById('qTotal').textContent = quizData.length;
+            const progress = ((index + 1) / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // Update question
+            document.getElementById('chartTitle').textContent = question.chartTitle;
+            document.getElementById('chartSubtitle').textContent = question.chartSubtitle;
+            document.getElementById('questionText').textContent = question.question;
+
+            // Update chart
+            const chartArea = document.getElementById('chartArea');
+            chartArea.innerHTML = '';
+            question.chartData.forEach(data => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = data.height;
+                bar.innerHTML = `
+                    <span class="bar-value">${data.value}</span>
+                    <span class="bar-label">${data.label}</span>
+                `;
+                chartArea.appendChild(bar);
+            });
+
+            document.querySelector('.chart-info').textContent = question.chartInfo;
+
+            // Update options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, i) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'answer-option';
+                optionDiv.onclick = function(e) { selectAnswer(this, option.label); };
+                optionDiv.innerHTML = `
+                    <div class="option-label">${option.label}</div>
+                    <div class="option-text">${option.text}</div>
+                `;
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Reset feedback
+            document.getElementById('feedbackSection').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+
+            // Update feedback content
+            document.getElementById('feedbackTitle').textContent = question.feedbackTitle;
+            document.getElementById('feedbackMessage').textContent = question.feedbackMessage;
+        }
+
+        function selectAnswer(element, answer) {
+            if (answered) return;
+
+            answered = true;
+            const question = quizData[currentQuestionIndex];
+            const isCorrect = answer === question.correctAnswer;
+
+            // Mark all options
+            document.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.add('disabled');
+            });
+
+            // Mark selected
+            element.classList.add('selected');
+
+            // Show feedback
+            if (isCorrect) {
+                element.classList.add('correct');
+                score += 100;
+                element.classList.remove('selected');
+                document.getElementById('feedbackTitle').textContent = '✓ Correct!';
+            } else {
+                element.classList.add('incorrect');
+                element.classList.remove('selected');
+                document.getElementById('feedbackTitle').textContent = '✗ Incorrect';
+                document.getElementById('feedbackMessage').textContent = `The correct answer is ${question.correctAnswer}. ${question.feedbackMessage}`;
+            }
+
+            document.getElementById('feedbackSection').classList.add('show');
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('score').textContent = score;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // Initialize
+        loadQuestion(0);
+    </script>
+</body>
+</html>

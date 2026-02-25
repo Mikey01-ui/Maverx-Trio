@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layer 1: Gameplay - THE DATA HEIST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #00f3ff;
+            --electric-purple: #bf00ff;
+            --toxic-green: #39ff14;
+            --deep-black: #0a0e27;
+            --dark-navy: #1a1f3a;
+            --cyber-gray: #2a2f4a;
+            --success: #2d5016;
+            --error: #5a1a1a;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--deep-black);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Header Bar */
+        .header-bar {
+            background: rgba(26, 31, 58, 0.95);
+            border-bottom: 2px solid var(--neon-blue);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .round-info {
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-box,
+        .score-box {
+            background: rgba(0, 243, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 6px;
+            padding: 6px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
+        }
+
+        .timer-label,
+        .score-label {
+            font-size: 9px;
+            color: var(--toxic-green);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .timer-value,
+        .score-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--toxic-green);
+            text-shadow: 0 0 8px var(--toxic-green);
+        }
+
+        .timer-value.warning {
+            color: var(--electric-purple);
+            text-shadow: 0 0 10px var(--electric-purple);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Container */
+        .game-container {
+            position: relative;
+            z-index: 5;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: var(--deep-black);
+            border: 2px solid var(--toxic-green);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .instructions-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .instructions-text strong {
+            color: var(--toxic-green);
+        }
+
+        /* Game Layout */
+        .game-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: start;
+        }
+
+        /* Datasets Panel */
+        .datasets-panel {
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 14px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px var(--neon-blue);
+            flex-shrink: 0;
+        }
+
+        .datasets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 6px;
+            max-height: 500px;
+        }
+
+        .dataset-card {
+            background: rgba(0, 243, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 10px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dataset-card:active {
+            cursor: grabbing;
+        }
+
+        .dataset-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .dataset-card.matched {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: var(--toxic-green);
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        .dataset-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--toxic-green);
+            margin-bottom: 4px;
+        }
+
+        .dataset-description {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .dataset-meta {
+            font-size: 9px;
+            color: var(--neon-blue);
+            font-style: italic;
+        }
+
+        /* Departments Panel */
+        .departments-panel {
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--toxic-green);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .departments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .department-drop {
+            background: rgba(57, 255, 20, 0.05);
+            border: 2px dashed var(--toxic-green);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 80px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .department-drop.drag-over {
+            background: rgba(57, 255, 20, 0.2);
+            border-style: solid;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+            transform: scale(1.03);
+        }
+
+        .department-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--toxic-green);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .department-icon {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 4px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .department-hint {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .dropped-dataset {
+            background: rgba(0, 243, 255, 0.2);
+            border: 1px solid var(--neon-blue);
+            border-radius: 4px;
+            padding: 6px;
+            margin-top: 6px;
+            font-size: 10px;
+            color: white;
+        }
+
+        /* Feedback Toast */
+        .feedback-toast {
+            position: fixed;
+            top: 80px;
+            right: 15px;
+            background: rgba(26, 31, 58, 0.95);
+            border: 2px solid var(--toxic-green);
+            border-radius: 8px;
+            padding: 12px;
+            min-width: 250px;
+            z-index: 200;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .feedback-toast.show {
+            transform: translateX(0);
+        }
+
+        .feedback-toast.correct {
+            border-color: var(--toxic-green);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+        }
+
+        .feedback-toast.incorrect {
+            border-color: var(--electric-purple);
+            box-shadow: 0 0 20px rgba(191, 0, 255, 0.5);
+        }
+
+        .feedback-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feedback-toast.correct .feedback-title {
+            color: var(--toxic-green);
+        }
+
+        .feedback-toast.incorrect .feedback-title {
+            color: var(--electric-purple);
+        }
+
+        .feedback-message {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .submit-button {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 12px 35px;
+            background: var(--toxic-green);
+            border: 3px solid var(--toxic-green);
+            border-radius: 8px;
+            color: var(--deep-black);
+            cursor: pointer;
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.6),
+                0 4px 0 #1a8007;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 40px rgba(57, 255, 20, 0.8),
+                0 6px 0 #1a8007;
+        }
+
+        .submit-button:active {
+            transform: translateY(1px);
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.6),
+                0 2px 0 #1a8007;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Progress */
+        .progress-text {
+            font-size: 12px;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+        }
+
+        /* Scrollbar */
+        .datasets-list::-webkit-scrollbar,
+        .departments-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .datasets-list::-webkit-scrollbar-track,
+        .departments-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+        }
+
+        .datasets-list::-webkit-scrollbar-thumb,
+        .departments-panel::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .datasets-list {
+                max-height: 400px;
+            }
+            
+            .departments-panel {
+                max-height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .game-container {
+                padding: 12px;
+            }
+
+            .dataset-card {
+                padding: 8px;
+            }
+
+            .submit-button {
+                font-size: 13px;
+                padding: 10px 25px;
+            }
+            
+            .datasets-list {
+                max-height: 350px;
+            }
+            
+            .departments-panel {
+                max-height: 400px;
+            }
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--electric-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            color: var(--electric-purple);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--electric-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--electric-purple);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .nav-left {
+            left: 15px;
+        }
+
+        .nav-right {
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="grid-background"></div>
+
+    <!-- Navigation Arrows -->
+    <a href="round1_intro.html" class="nav-arrow nav-left" title="Previous Page">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <a href="round1completion.html" class="nav-arrow nav-right" title="Next Page">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+
+    <!-- ==================== AUDIO ELEMENTS ==================== -->
+    
+    <!-- BACKGROUND MUSIC: Gameplay theme -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="../Assets/cyberpunk.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Header Bar -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="round-info">LAYER 1: THE BLUEPRINTS</div>
+        </div>
+        <div class="header-right">
+            <div class="timer-box">
+                <div class="timer-label">TIME</div>
+                <div class="timer-value" id="timer">8:00</div>
+            </div>
+            <div class="score-box">
+                <div class="score-label">SCORE</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="game-container">
+        <!-- Instructions -->
+        <div class="instructions">
+            <p class="instructions-text">
+                <strong>Drag each dataset</strong> from the left and <strong>drop it onto the correct department</strong> on the right. 
+                Use the metadata and descriptions to figure out which department owns each dataset.
+            </p>
+        </div>
+
+        <!-- Game Layout -->
+        <div class="game-layout">
+            <!-- Datasets Panel -->
+            <div class="datasets-panel">
+                <h2 class="panel-title"><i class="fas fa-chart-bar"></i> Available Datasets</h2>
+                <div class="datasets-list" id="datasetsList">
+                    <!-- Datasets will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Departments Panel -->
+            <div class="departments-panel">
+                <h2 class="panel-title"><i class="fas fa-building"></i> Departments</h2>
+                <p class="progress-text" id="progressText">Matched: 0/10</p>
+                <div class="departments-list" id="departmentsList">
+                    <!-- Departments will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-section">
+            <button class="submit-button" id="submitBtn" onclick="submitResults()" disabled>
+                SUBMIT RESULTS
+            </button>
+        </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div class="feedback-toast" id="feedbackToast">
+        <div class="feedback-title" id="feedbackTitle">Correct!</div>
+        <div class="feedback-message" id="feedbackMessage">Great job matching that dataset!</div>
+    </div>
+
+    <script>
+        // ==================== GAME DATA ====================
+        const datasets = [
+            {
+                id: 1,
+                name: "Employee_Records_2024",
+                description: "Contains full names, hire dates, job titles, salary information, and performance reviews.",
+                metadata: "Owner: People Ops | Updated: Weekly | Sensitivity: High",
+                correctDept: "hr"
+            },
+            {
+                id: 2,
+                name: "Customer_Purchase_History",
+                description: "Transaction logs including customer IDs, purchase amounts, product categories, and timestamps.",
+                metadata: "Owner: Revenue Team | Updated: Daily | Sensitivity: Medium",
+                correctDept: "sales"
+            },
+            {
+                id: 3,
+                name: "Quarterly_Financial_Reports",
+                description: "Comprehensive P&L statements, balance sheets, cash flow analysis, and budget forecasts.",
+                metadata: "Owner: Accounting Dept | Updated: Quarterly | Sensitivity: High",
+                correctDept: "finance"
+            },
+            {
+                id: 4,
+                name: "Product_Inventory_Levels",
+                description: "Real-time stock quantities, warehouse locations, reorder points, and supplier information.",
+                metadata: "Owner: Supply Chain | Updated: Real-time | Sensitivity: Low",
+                correctDept: "operations"
+            },
+            {
+                id: 5,
+                name: "Marketing_Campaign_Analytics",
+                description: "Ad performance metrics, conversion rates, audience demographics, and ROI calculations.",
+                metadata: "Owner: Growth Team | Updated: Daily | Sensitivity: Medium",
+                correctDept: "marketing"
+            },
+            {
+                id: 6,
+                name: "IT_Infrastructure_Logs",
+                description: "Server uptime data, security incidents, system performance metrics, and network traffic.",
+                metadata: "Owner: Tech Ops | Updated: Continuous | Sensitivity: Medium",
+                correctDept: "it"
+            },
+            {
+                id: 7,
+                name: "Benefits_Enrollment_Data",
+                description: "Health insurance selections, 401k contributions, PTO balances, and dependent information.",
+                metadata: "Owner: People Ops | Updated: Monthly | Sensitivity: High",
+                correctDept: "hr"
+            },
+            {
+                id: 8,
+                name: "Sales_Pipeline_CRM",
+                description: "Lead sources, opportunity stages, deal values, expected close dates, and customer communications.",
+                metadata: "Owner: Revenue Team | Updated: Real-time | Sensitivity: Medium",
+                correctDept: "sales"
+            },
+            {
+                id: 9,
+                name: "Budget_Allocation_Model",
+                description: "Department spending limits, expense approvals, cost center assignments, and variance reports.",
+                metadata: "Owner: Accounting Dept | Updated: Monthly | Sensitivity: High",
+                correctDept: "finance"
+            },
+            {
+                id: 10,
+                name: "Website_Traffic_Analytics",
+                description: "Visitor counts, page views, bounce rates, traffic sources, and conversion funnels.",
+                metadata: "Owner: Growth Team | Updated: Real-time | Sensitivity: Low",
+                correctDept: "marketing"
+            }
+        ];
+
+        const departments = [
+            { id: "hr", name: "Human Resources", icon: "<i class='fas fa-users'></i>", hint: "People, employees, benefits" },
+            { id: "sales", name: "Sales", icon: "<i class='fas fa-handshake'></i>", hint: "Customers, deals, revenue" },
+            { id: "finance", name: "Finance", icon: "<i class='fas fa-coins'></i>", hint: "Money, budgets, reports" },
+            { id: "operations", name: "Operations", icon: "<i class='fas fa-gears'></i>", hint: "Logistics, inventory, supply" },
+            { id: "marketing", name: "Marketing", icon: "<i class='fas fa-chart-line'></i>", hint: "Campaigns, analytics, growth" },
+            { id: "it", name: "IT", icon: "<i class='fas fa-computer'></i>", hint: "Tech, systems, security" }
+        ];
+
+        // ==================== GAME STATE ====================
+        let score = 0;
+        let matchedCount = 0;
+        let timeLeft = 480; // 8 minutes in seconds
+        let timerInterval;
+        let matches = {}; // Store dataset -> department matches
+        let audioEnabled = true;
+
+        const sounds = {
+            bg: document.getElementById('bgMusic')
+        };
+
+        // ==================== INITIALIZATION ====================
+        function init() {
+            renderDatasets();
+            renderDepartments();
+            startTimer();
+            
+            // Auto-start music
+            sounds.bg.play().catch(() => {
+                audioEnabled = false;
+            });
+        }
+
+        function playSound(type) {
+            if (audioEnabled && sounds[type]) {
+                sounds[type].currentTime = 0;
+                sounds[type].play().catch(e => console.log('Audio play failed'));
+            }
+        }
+
+        // ==================== RENDER FUNCTIONS ====================
+        function renderDatasets() {
+            const container = document.getElementById('datasetsList');
+            container.innerHTML = '';
+            
+            datasets.forEach(dataset => {
+                const card = document.createElement('div');
+                card.className = 'dataset-card';
+                card.draggable = true;
+                card.id = `dataset-${dataset.id}`;
+                card.dataset.id = dataset.id;
+                
+                card.innerHTML = `
+                    <div class="dataset-name">${dataset.name}</div>
+                    <div class="dataset-description">${dataset.description}</div>
+                    <div class="dataset-meta">${dataset.metadata}</div>
+                `;
+                
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragend', handleDragEnd);
+                
+                container.appendChild(card);
+            });
+        }
+
+        function renderDepartments() {
+            const container = document.getElementById('departmentsList');
+            container.innerHTML = '';
+            
+            departments.forEach(dept => {
+                const dropZone = document.createElement('div');
+                dropZone.className = 'department-drop';
+                dropZone.dataset.deptId = dept.id;
+                
+                dropZone.innerHTML = `
+                    <div class="department-icon">${dept.icon}</div>
+                    <div class="department-name">${dept.name}</div>
+                    <div class="department-hint">${dept.hint}</div>
+                `;
+                
+                dropZone.addEventListener('dragover', handleDragOver);
+                dropZone.addEventListener('dragleave', handleDragLeave);
+                dropZone.addEventListener('drop', handleDrop);
+                
+                container.appendChild(dropZone);
+            });
+        }
+
+        // ==================== DRAG AND DROP ====================
+        let draggedElement = null;
+
+        function handleDragStart(e) {
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            playSound('drag');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            if (!draggedElement) return;
+            
+            const datasetId = parseInt(draggedElement.dataset.id);
+            const deptId = e.currentTarget.dataset.deptId;
+            const dataset = datasets.find(d => d.id === datasetId);
+            
+            if (!dataset) return;
+            
+            // Check if correct
+            const isCorrect = dataset.correctDept === deptId;
+            
+            if (isCorrect) {
+                // Correct match!
+                score += 100;
+                matchedCount++;
+                matches[datasetId] = deptId;
+                
+                // Mark dataset as matched
+                draggedElement.classList.add('matched');
+                draggedElement.draggable = false;
+                
+                // Add to department
+                const dropped = document.createElement('div');
+                dropped.className = 'dropped-dataset';
+                dropped.textContent = `✓ ${dataset.name}`;
+                e.currentTarget.appendChild(dropped);
+                
+                // Show feedback
+                showFeedback(true, "Correct Match!", `${dataset.name} belongs to ${departments.find(d => d.id === deptId).name}!`);
+                
+                // Update UI
+                updateScore();
+                updateProgress();
+                
+                // Check if all matched
+                if (matchedCount === 10) {
+                    document.getElementById('submitBtn').disabled = false;
+                }
+            } else {
+                // Incorrect match
+                showFeedback(false, "Incorrect Match", "Try again! Check the metadata and description carefully.");
+            }
+            
+            draggedElement = null;
+        }
+
+        // ==================== FEEDBACK ====================
+        function showFeedback(isCorrect, title, message) {
+            const toast = document.getElementById('feedbackToast');
+            const toastTitle = document.getElementById('feedbackTitle');
+            const toastMessage = document.getElementById('feedbackMessage');
+            
+            toast.className = 'feedback-toast';
+            if (isCorrect) {
+                toast.classList.add('correct');
+                toastTitle.textContent = '✓ ' + title;
+            } else {
+                toast.classList.add('incorrect');
+                toastTitle.textContent = '✗ ' + title;
+            }
+            
+            toastMessage.textContent = message;
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== TIMER ====================
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = display;
+            
+            // Warning state when under 1 minute
+            if (timeLeft <= 60) {
+                timerElement.classList.add('warning');
+            }
+        }
+
+        // ==================== UI UPDATES ====================
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateProgress() {
+            document.getElementById('progressText').textContent = `Matched: ${matchedCount}/10`;
+        }
+
+        // ==================== SUBMIT ====================
+        function submitResults() {
+            clearInterval(timerInterval);
+            
+            // Store results in sessionStorage
+            sessionStorage.setItem('round1Score', score);
+            sessionStorage.setItem('round1Time', 480 - timeLeft);
+            sessionStorage.setItem('round1Matches', matchedCount);
+            
+            // Navigate to completion page
+            setTimeout(() => {
+                window.location.href = 'round1_completion.html';
+            }, 500);
+        }
+
+        function endGame(completed) {
+            clearInterval(timerInterval);
+            
+            if (!completed && matchedCount < 10) {
+                alert('Time\'s up! Moving to results...');
+            }
+            
+            submitResults();
+        }
+
+        // ==================== START GAME ====================
+        init();
+    </script>
+</body>
+</html>

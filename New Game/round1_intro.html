@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layer 1: The Blueprints - THE DATA HEIST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #00f3ff;
+            --electric-purple: #bf00ff;
+            --toxic-green: #39ff14;
+            --deep-black: #0a0e27;
+            --dark-navy: #1a1f3a;
+            --cyber-gray: #2a2f4a;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--deep-black);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: block;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Main Container */
+        .intro-container {
+            position: relative;
+            z-index: 20;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 12px 15px;
+        }
+
+        /* Round Badge */
+        .round-badge {
+            text-align: center;
+            margin-bottom: 12px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .layer-number {
+            background: var(--toxic-green);
+            color: var(--deep-black);
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.6);
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .round-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-blue),
+                0 0 40px var(--neon-blue);
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+        }
+
+        .round-subtitle {
+            font-size: 12px;
+            color: var(--toxic-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ACE Panel */
+        .ace-panel {
+            background: rgba(26, 31, 58, 0.95);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 
+                0 0 30px rgba(0, 243, 255, 0.5),
+                inset 0 0 30px rgba(0, 243, 255, 0.1);
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Corner decorations */
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--toxic-green);
+        }
+        .corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        .ace-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .ace-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--toxic-green);
+            overflow: hidden;
+            box-shadow: 0 0 12px var(--toxic-green);
+            flex-shrink: 0;
+        }
+
+        .ace-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ace-info h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            color: var(--neon-blue);
+            margin-bottom: 1px;
+        }
+
+        .ace-info p {
+            font-size: 10px;
+            color: var(--toxic-green);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .briefing-text {
+            font-size: 12px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .briefing-text strong {
+            color: var(--toxic-green);
+            font-weight: 700;
+        }
+
+        /* Objective Box */
+        .objective-box {
+            background: var(--deep-black);
+            border: 2px solid var(--toxic-green);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .objective-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--toxic-green);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .objective-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .objective-list li {
+            font-size: 11px;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .objective-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--neon-blue);
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* Challenge Preview */
+        .challenge-preview {
+            background: rgba(0, 243, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            animation: fadeInUp 0.8s ease-out 0.9s backwards;
+        }
+
+        .preview-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .preview-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+        }
+
+        .preview-item {
+            background: rgba(26, 31, 58, 0.8);
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .preview-item:hover {
+            border-color: var(--toxic-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(57, 255, 20, 0.3);
+        }
+
+        .preview-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .preview-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.2;
+        }
+
+        /* Start Button */
+        .start-section {
+            text-align: center;
+            margin-top: 12px;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.8s ease-out 1.2s backwards;
+        }
+
+        .ready-text {
+            font-size: 11px;
+            color: var(--electric-purple);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .start-button {
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 28px;
+            background: var(--toxic-green);
+            border: 3px solid var(--toxic-green);
+            border-radius: 8px;
+            color: var(--deep-black);
+            cursor: pointer;
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.6),
+                0 4px 0 #1a8007;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 30px rgba(57, 255, 20, 0.6),
+                    0 8px 0 #1a8007;
+            }
+            50% {
+                box-shadow: 
+                    0 0 50px rgba(57, 255, 20, 0.9),
+                    0 8px 0 #1a8007;
+            }
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 50px rgba(57, 255, 20, 0.9),
+                0 6px 0 #1a8007;
+        }
+
+        .start-button:active {
+            transform: translateY(1px);
+            box-shadow: 
+                0 0 30px rgba(57, 255, 20, 0.6),
+                0 1px 0 #1a8007;
+        }
+
+        /* Audio Toggle */
+        .audio-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 3px solid var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            font-size: 24px;
+        }
+
+        .audio-toggle:hover {
+            background: rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 30px var(--neon-blue);
+            transform: scale(1.1);
+        }
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--electric-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            color: var(--electric-purple);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--electric-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--electric-purple);
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .nav-left {
+            left: 15px;
+        }
+
+        .nav-right {
+            right: 15px;
+        }
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 24px;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid var(--electric-purple);
+            border-radius: 25px;
+            color: var(--electric-purple);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: var(--electric-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--electric-purple);
+            transform: scale(1.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .intro-container {
+                padding: 12px 10px;
+            }
+
+            .round-title {
+                font-size: 24px;
+            }
+
+            .ace-panel {
+                padding: 12px;
+            }
+
+            .briefing-text {
+                font-size: 11px;
+            }
+
+            .start-button {
+                font-size: 12px;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="grid-background"></div>
+    <div class="scanlines"></div>
+
+    <!-- ==================== AUDIO ELEMENTS ==================== -->
+    
+    <!-- BACKGROUND MUSIC: Preparation music -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="../Assets/cyberpunk.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Controls -->
+    <a href="briefing room.html" class="back-button"><i class="fas fa-arrow-left"></i> BACK</a>
+    
+    <div class="audio-toggle" onclick="toggleAudio()" title="Toggle Sound">
+        <i class="fas fa-volume-high" id="audioIcon"></i>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <a href="briefing-room.html" class="nav-arrow nav-left" title="Previous Page">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <a href="round1gameplay.html" class="nav-arrow nav-right" title="Next Page">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+
+    <!-- Main Container -->
+    <div class="intro-container">
+        <!-- Round Badge -->
+        <div class="round-badge">
+            <div class="layer-number">SECURITY LAYER 1</div>
+            <h1 class="round-title">THE BLUEPRINTS</h1>
+            <p class="round-subtitle">Data Governance Challenge</p>
+        </div>
+
+        <!-- ACE Panel -->
+        <div class="ace-panel">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+
+            <div class="ace-header">
+                <div class="ace-avatar">
+                    <img src="https://image2url.com/r2/default/images/1771929895096-50b385f4-ed6b-4ea4-941f-ff41baea509b.png" alt="ACE">
+                </div>
+                <div class="ace-info">
+                    <h3>ACE</h3>
+                    <p>Mission Control</p>
+                </div>
+            </div>
+
+            <div class="briefing-text">
+                Alright rookie, first things first. Before we can steal anything, we need to know 
+                <strong>where everything is</strong>. MegaCorp's vault contains thousands of datasets 
+                scattered across different departments. We need to map this place out.
+            </div>
+
+            <div class="briefing-text">
+                I've pulled some intel on their <strong>data governance structure</strong>. Each department 
+                owns specific datasets - HR handles employee info, Finance manages the money data, Sales 
+                tracks customer relationships. Your job? <strong>Match the datasets to their owners</strong>.
+            </div>
+
+            <div class="briefing-text">
+                Look at the metadata, check the data lineage, and use your head. Get this right and we'll 
+                know exactly where to find what we need. Mess it up, and we'll be wandering blind in a 
+                digital maze when the clock is ticking.
+            </div>
+        </div>
+
+        <!-- Objective Box -->
+        <div class="objective-box">
+            <h3 class="objective-title"><i class="fas fa-bullseye"></i> YOUR OBJECTIVE</h3>
+            <ul class="objective-list">
+                <li>Review 10 different datasets with their descriptions and metadata</li>
+                <li>Identify which department owns each dataset based on the clues</li>
+                <li>Drag and drop each dataset to the correct department</li>
+                <li>Score points for correct matches (100 points per match)</li>
+                <li>Complete within the time limit to maximize your score</li>
+            </ul>
+        </div>
+
+        <!-- Challenge Preview -->
+        <div class="challenge-preview">
+            <h3 class="preview-title"><i class="fas fa-list"></i> WHAT TO EXPECT</h3>
+            <div class="preview-content">
+                <div class="preview-item">
+                    <div class="preview-icon"><i class="fas fa-chart-bar"></i></div>
+                    <div class="preview-label">10 Datasets</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-icon"><i class="fas fa-building"></i></div>
+                    <div class="preview-label">6 Departments</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-icon"><i class="fas fa-hourglass-end"></i></div>
+                    <div class="preview-label">8 Minutes</div>
+                </div>
+                <div class="preview-item">
+                    <div class="preview-icon"><i class="fas fa-star"></i></div>
+                    <div class="preview-label">1000 Points Max</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Section -->
+        <div class="start-section">
+            <p class="ready-text"><i class="fas fa-lock-open"></i> READY TO MAP THE VAULT?</p>
+            <button class="start-button" onclick="startChallenge()">
+                <i class="fas fa-play"></i> BEGIN CHALLENGE
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUDIO SYSTEM ====================
+        let audioEnabled = true;
+        const sounds = {
+            bg: document.getElementById('bgMusic')
+        };
+
+        // Auto-start music
+        sounds.bg.play().catch(() => {
+            audioEnabled = false;
+            document.getElementById('audioIcon').classList.remove('fa-volume-high');
+            document.getElementById('audioIcon').classList.add('fa-volume-xmark');
+        });
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('audioIcon');
+            if (audioEnabled) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+                sounds.bg.play().catch(e => console.log('Audio play failed'));
+            } else {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+                sounds.bg.pause();
+            }
+        }
+
+        function playSound(type) {
+            if (audioEnabled && sounds[type]) {
+                sounds[type].currentTime = 0;
+                sounds[type].play().catch(e => console.log('Audio play failed'));
+            }
+        }
+
+        // ==================== NAVIGATION ====================
+        function startChallenge() {
+            // Add dramatic effect
+            document.querySelector('.start-button').innerHTML = '<i class="fas fa-spinner fa-spin"></i> LOADING...';
+            document.querySelector('.start-button').disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = 'round1_gameplay.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

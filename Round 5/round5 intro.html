@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round 5 - Decision Catalyst Introduction (B&W Wireframe)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        .intro-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 40px;
+        }
+
+        /* ==================== HEADER SECTION ==================== */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 40px;
+            border-bottom: 3px solid var(--black);
+            position: relative;
+        }
+
+        .header-section::after {
+            content: 'HEADER SECTION';
+            position: absolute;
+            top: 0;
+            right: 20px;
+            background: var(--gray-600);
+            color: var(--white);
+            padding: 4px 12px;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 3px;
+        }
+
+        .round-number {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .round-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .round-subtitle {
+            font-size: 20px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .round-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gray-800);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--white);
+            margin: 30px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ==================== MAIN CONTENT GRID ==================== */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        /* ==================== SCENARIO SECTION ==================== */
+        .scenario-section {
+            background: var(--gray-100);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            padding: 35px;
+            position: relative;
+        }
+
+        .scenario-section::before {
+            content: 'BOARDROOM SCENARIO';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--black);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 15px;
+        }
+
+        .scenario-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-700);
+            margin-bottom: 20px;
+        }
+
+        .scenario-highlight {
+            background: var(--white);
+            border-left: 4px solid var(--black);
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .highlight-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .highlight-text {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        /* ==================== OBJECTIVES SECTION ==================== */
+        .objectives-section {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            padding: 35px;
+            position: relative;
+        }
+
+        .objectives-section::before {
+            content: 'LEARNING OBJECTIVES';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .objectives-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .objective-item {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .objective-number {
+            width: 35px;
+            height: 35px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+            border: 2px solid var(--black);
+        }
+
+        .objective-content {
+            flex: 1;
+            padding-top: 5px;
+        }
+
+        .objective-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 5px;
+        }
+
+        .objective-description {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        /* ==================== VISUALIZATION PRINCIPLES ==================== */
+        .principles-section {
+            background: var(--gray-100);
+            border: 2px solid var(--gray-400);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .principles-section::before {
+            content: 'VISUALIZATION BEST PRACTICES';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--gray-600);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .principle-card {
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: 10px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .principle-card:hover {
+            border-color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 4px 4px 0px var(--gray-300);
+        }
+
+        .principle-step {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .principle-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gray-200);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--black);
+            margin: 0 auto 15px;
+            text-transform: uppercase;
+        }
+
+        .principle-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .principle-text {
+            font-size: 12px;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        /* ==================== STAKEHOLDER CONTEXT ==================== */
+        .stakeholders-section {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .stakeholders-section::before {
+            content: 'YOUR AUDIENCE';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .stakeholders-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 25px;
+        }
+
+        .stakeholders-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stakeholder-box {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .stakeholder-role {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stakeholder-context {
+            font-size: 12px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .communication-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--gray-300);
+        }
+
+        .flow-box {
+            padding: 12px 20px;
+            background: var(--gray-100);
+            border: 2px solid var(--gray-400);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-500);
+        }
+
+        /* ==================== ACTION SECTION ==================== */
+        .action-section {
+            text-align: center;
+            position: relative;
+        }
+
+        .action-section::before {
+            content: 'START BUTTON';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-400);
+            color: var(--white);
+            padding: 2px 10px;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 3px;
+        }
+
+        .ready-message {
+            font-size: 16px;
+            color: var(--gray-700);
+            margin-bottom: 25px;
+        }
+
+        .start-button {
+            padding: 20px 60px;
+            font-size: 18px;
+            font-weight: 700;
+            background: var(--black);
+            color: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .start-button:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 0px var(--gray-300);
+        }
+
+        .start-icon {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+            background: var(--gray-200);
+            border: 2px solid var(--gray-400);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stakeholders-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .round-title {
+                font-size: 36px;
+            }
+
+            .communication-flow {
+                flex-direction: column;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-container > * {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* ==================== NAVIGATION ARROWS ==================== */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="intro-container">
+        <!-- HEADER SECTION -->
+        <div class="header-section">
+            <div class="round-number">Round 5 of 5</div>
+            <h1 class="round-title">Decision Catalyst</h1>
+            <p class="round-subtitle">Data Storytelling & Strategic Communication</p>
+            <div class="round-icon">R5</div>
+        </div>
+
+        <!-- MAIN CONTENT GRID -->
+        <div class="content-grid">
+            <!-- SCENARIO SECTION -->
+            <div class="scenario-section">
+                <div class="section-icon">BR</div>
+                <h2 class="section-title">The Boardroom</h2>
+                
+                <p class="scenario-text">
+                    You've climbed the ladder from data organization to analytical excellence. Now you face your 
+                    ultimate challenge: the executive boardroom. The C-suite is waiting, and they expect clear, 
+                    compelling narratives—not raw data.
+                </p>
+
+                <p class="scenario-text">
+                    Your analysis is only as powerful as your ability to communicate it. Transform complex findings 
+                    into executive-ready presentations. Make data speak a language that drives strategic decisions 
+                    and stakeholder alignment.
+                </p>
+
+                <div class="scenario-highlight">
+                    <div class="highlight-title">Your Final Challenge</div>
+                    <div class="highlight-text">
+                        Craft persuasive data narratives by selecting the right visualizations, structuring compelling 
+                        arguments, and communicating insights that catalyze strategic decision-making across the organization.
+                    </div>
+                </div>
+            </div>
+
+            <!-- OBJECTIVES SECTION -->
+            <div class="objectives-section">
+                <div class="section-icon">OBJ</div>
+                <h2 class="section-title">Learning Objectives</h2>
+                
+                <ul class="objectives-list">
+                    <li class="objective-item">
+                        <div class="objective-number">1</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Narrative Construction</div>
+                            <div class="objective-description">
+                                Build compelling data stories with clear context, trend identification, and actionable conclusions.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">2</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Visualization Selection</div>
+                            <div class="objective-description">
+                                Choose effective visualizations that illuminate key insights and support executive decision-making.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">3</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Stakeholder Communication</div>
+                            <div class="objective-description">
+                                Tailor messaging for diverse stakeholders and executive priorities across the organization.
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="objective-item">
+                        <div class="objective-number">4</div>
+                        <div class="objective-content">
+                            <div class="objective-title">Strategic Recommendation</div>
+                            <div class="objective-description">
+                                Translate data insights into specific, actionable recommendations for organizational strategy.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- VISUALIZATION BEST PRACTICES -->
+        <div class="principles-section">
+            <h2 class="section-title">Visualization Best Practices</h2>
+            
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <div class="principle-step">Principle 1</div>
+                    <div class="principle-icon">CHART</div>
+                    <div class="principle-title">Clarity First</div>
+                    <div class="principle-text">
+                        Choose charts that make insights immediately obvious. Simplicity trumps complexity every time in the boardroom.
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-step">Principle 2</div>
+                    <div class="principle-icon">MSG</div>
+                    <div class="principle-title">Message Alignment</div>
+                    <div class="principle-text">
+                        Ensure every visualization directly supports your key message and strategic recommendation.
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-step">Principle 3</div>
+                    <div class="principle-icon">FOCUS</div>
+                    <div class="principle-title">Visual Hierarchy</div>
+                    <div class="principle-text">
+                        Highlight the most important findings through color, size, and positioning to guide viewer attention.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAKEHOLDER CONTEXT -->
+        <div class="stakeholders-section">
+            <h2 class="stakeholders-title">Understanding Your Audience</h2>
+            
+            <div class="stakeholders-grid">
+                <div class="stakeholder-box">
+                    <div class="stakeholder-role">CFO</div>
+                    <div class="stakeholder-context">
+                        Focused on financial impact, ROI, and cost-benefit analysis. Wants bottom-line clarity.
+                    </div>
+                </div>
+
+                <div class="stakeholder-box">
+                    <div class="stakeholder-role">CEO</div>
+                    <div class="stakeholder-context">
+                        Concerned with strategic implications, market positioning, and competitive advantage.
+                    </div>
+                </div>
+
+                <div class="stakeholder-box">
+                    <div class="stakeholder-role">Head of Operations</div>
+                    <div class="stakeholder-context">
+                        Interested in efficiency improvements, process optimizations, and operational metrics.
+                    </div>
+                </div>
+            </div>
+
+            <div class="communication-flow">
+                <div class="flow-box">Data Analysis</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Strategic Narrative</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">Executive Decision</div>
+            </div>
+        </div>
+
+        <!-- ACTION SECTION -->
+        <div class="action-section">
+            <p class="ready-message">
+                Ready to master the art of data storytelling?
+            </p>
+            
+            <button class="start-button" onclick="startRound()">
+                <span>Start Round 5</span>
+                <span class="start-icon">></span>
+            </button>
+
+            <div class="difficulty-badge">Difficulty: Expert</div>
+        </div>
+    </div>
+
+    <script>
+        function startRound() {
+            window.location.href = 'round5 gameplay.html';
+        }
+    </script>
+
+    <!-- ==================== NAVIGATION ARROWS ==================== -->
+    <a href="round5 gameplay.html" class="nav-arrow right" title="Next">→</a>
+</body>
+</html>
