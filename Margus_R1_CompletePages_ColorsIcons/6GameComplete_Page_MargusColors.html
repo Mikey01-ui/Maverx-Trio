@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<!--
+  File: Game_Completion_Page_Maverx.html
+  Project: The Data Game (MVP) — Global Pages
+  Purpose: Maverx brand restyle of the Game Completion page using the Design Continuity Guide
+  Notes:
+    - Placeholder copy/values are preserved.
+    - Visual system: layered depth, glassmorphism cards, Maverx gradients, motion, and premium hover states.
+  Updated: 2026-02-08
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Complete - The Data Game</title>
+
+  <!-- Typography: Space Grotesk (headers) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==================== RESET ==================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    /* ==================== MAVERX TOKENS ==================== */
+    :root{
+      /* Brand palette (from Design Continuity Guide) */
+      --purple-ink: #100021;
+      --purple-dark: #1f0531;
+      --purple-deep: #30004a;
+      --purple-primary: #5400ad;
+      --orange: #f79421;
+      --pink: #d31972;
+      --grey-light: #d6e1e5;
+
+      /* Surfaces */
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-bg-strong: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-strong: rgba(255, 255, 255, 0.18);
+
+      /* Effects */
+      --shadow-lg: 0 30px 90px rgba(0, 0, 0, 0.45);
+      --shadow-md: 0 22px 60px rgba(0, 0, 0, 0.35);
+      --glow: 0 0 0 1px rgba(255,255,255,0.08), 0 20px 60px rgba(84, 0, 173, 0.25);
+
+      /* Radius / spacing */
+      --r-lg: 24px;
+      --r-md: 16px;
+      --r-sm: 12px;
+
+      /* Motion */
+      --ease-premium: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ==================== PAGE BACKGROUND LAYERS ==================== */
+    body{
+      font-family: "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--grey-light);
+      background: linear-gradient(135deg, var(--purple-ink) 0%, var(--purple-dark) 50%, var(--purple-deep) 100%);
+      overflow-x: hidden;
+    }
+
+    /* Pattern overlay (diagonal stripes, subtle drift) */
+    body::before{
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(255,255,255,0.55) 0px,
+          rgba(255,255,255,0.55) 1px,
+          rgba(255,255,255,0) 1px,
+          rgba(255,255,255,0) 14px
+        );
+      transform: translate3d(0,0,0);
+      animation: patternDrift 20s linear infinite;
+      mix-blend-mode: overlay;
+      z-index: 0;
+    }
+
+    @keyframes patternDrift{
+      from{ transform: translate3d(0,0,0); }
+      to{ transform: translate3d(-120px, 120px, 0); }
+    }
+
+    /* Ambient orb layer */
+    .orbs{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .orb{
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+      transform: translate3d(0,0,0);
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+
+    .orb.orange{
+      background: radial-gradient(circle at 30% 30%, rgba(247,148,33,0.95), rgba(247,148,33,0.0) 70%);
+      top: -120px;
+      left: -140px;
+      animation-duration: 10s;
+    }
+
+    .orb.pink{
+      background: radial-gradient(circle at 40% 40%, rgba(211,25,114,0.9), rgba(211,25,114,0.0) 70%);
+      bottom: -160px;
+      right: -180px;
+      animation-duration: 9s;
+    }
+
+    .orb.purple{
+      background: radial-gradient(circle at 35% 35%, rgba(84,0,173,0.9), rgba(84,0,173,0.0) 70%);
+      top: 20%;
+      right: 15%;
+      width: 600px;
+      height: 600px;
+      animation-duration: 12s;
+    }
+
+    @keyframes orbFloat{
+      0%,100%{ transform: translate3d(0,0,0) scale(1); }
+      50%{ transform: translate3d(0,-28px,0) scale(1.04); }
+    }
+
+    /* Navigation arrows */
+    .nav-arrow{
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      color: var(--grey-light);
+      text-decoration: none;
+      font-size: 24px;
+    }
+
+    .nav-arrow:hover{
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 10px 30px rgba(247, 148, 33, 0.4);
+      color: var(--white);
+    }
+
+    .nav-arrow.left{
+      left: 30px;
+    }
+
+    .nav-arrow.right{
+      right: 30px;
+    }
+
+    /* ==================== LAYOUT ==================== */
+    .page{
+      position: relative;
+      z-index: 2;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 56px 18px;
+    }
+
+    .container{
+      width: 100%;
+      max-width: 1180px;
+    }
+
+    /* Main glass frame */
+    .completion-shell{
+      position: relative;
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px solid rgba(255,255,255,0.10);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .completion-shell::before{
+      /* soft inner sheen */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(800px 500px at 20% 0%, rgba(247,148,33,0.12), rgba(247,148,33,0) 60%),
+        radial-gradient(900px 600px at 100% 30%, rgba(211,25,114,0.10), rgba(211,25,114,0) 60%),
+        radial-gradient(900px 700px at 60% 110%, rgba(84,0,173,0.16), rgba(84,0,173,0) 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content{
+      position: relative;
+      z-index: 1;
+      padding: 44px 44px 40px;
+    }
+
+    /* ==================== TYPOGRAPHY ==================== */
+    .kicker{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(247,148,33,0.16);
+      border: 1px solid rgba(247,148,33,0.28);
+      color: rgba(247,148,33,0.98);
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-title{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      letter-spacing: -1.2px;
+      font-size: 56px;
+      line-height: 1.05;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--grey-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle{
+      font-size: 17px;
+      line-height: 1.7;
+      color: rgba(214,225,229,0.88);
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* ==================== HERO ==================== */
+    .hero{
+      text-align: center;
+      padding: 10px 0 26px;
+    }
+
+    .hero-badge-row{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    .completion-badge{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: rgba(255,255,255,0.92);
+      font-size: 13px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+    }
+
+    .badge-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+      box-shadow: 0 0 0 3px rgba(247,148,33,0.18);
+    }
+
+    /* Success emblem */
+    .success-emblem{
+      width: 124px;
+      height: 124px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 2px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--glow);
+      overflow: hidden;
+    }
+
+    .success-emblem::before{
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, var(--orange), var(--pink), var(--purple-primary), var(--orange));
+      opacity: 0.9;
+      filter: blur(0.2px);
+      mask: radial-gradient(circle, transparent 58px, #000 60px);
+      -webkit-mask: radial-gradient(circle, transparent 58px, #000 60px);
+      animation: emblemSpin 6s linear infinite;
+    }
+
+    @keyframes emblemSpin{
+      from{ transform: rotate(0deg); }
+      to{ transform: rotate(360deg); }
+    }
+
+    .emblem-icon{
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(247,148,33,0.95) 0%, rgba(211,25,114,0.95) 100%);
+      box-shadow: 0 18px 50px rgba(247,148,33,0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .emblem-icon svg{
+      width: 30px;
+      height: 30px;
+      stroke: #ffffff;
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ==================== SECTIONS ==================== */
+    .section{
+      margin-top: 34px;
+    }
+
+    .section-header{
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+      padding-top: 6px;
+    }
+
+    .section-title{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-size: 26px;
+      letter-spacing: -0.4px;
+      color: rgba(255,255,255,0.96);
+    }
+
+    .section-meta{
+      font-size: 13px;
+      color: rgba(214,225,229,0.70);
+    }
+
+    .divider{
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+      margin: 24px 0;
+    }
+
+    /* ==================== STAT CARDS ==================== */
+    .stats-grid{
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 18px;
+    }
+
+    .card{
+      position: relative;
+      border-radius: var(--r-md);
+      background: var(--glass-bg);
+      border: 2px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      padding: 22px 22px 20px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: transform 0.4s var(--ease-premium), border-color 0.4s var(--ease-premium), background 0.4s var(--ease-premium);
+    }
+
+    .card::before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 60%, var(--purple-primary) 100%);
+      transition: width 0.5s var(--ease-premium);
+      opacity: 0.95;
+    }
+
+    .card:hover{
+      transform: translateY(-8px);
+      border-color: var(--glass-border-strong);
+      background: var(--glass-bg-strong);
+    }
+
+    .card:hover::before{
+      width: 100%;
+    }
+
+    .card-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .card-label{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 2.4px;
+      font-weight: 700;
+      font-size: 11px;
+      color: rgba(214,225,229,0.76);
+    }
+
+    .card-icon{
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: transform 0.4s var(--ease-premium);
+    }
+
+    .card:hover .card-icon{ transform: rotate(5deg) scale(1.05); }
+
+    .card-icon svg{
+      width: 20px;
+      height: 20px;
+      stroke: rgba(247,148,33,0.95);
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .card-value{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: rgba(255,255,255,0.96);
+      margin-bottom: 6px;
+    }
+
+    .card-sub{
+      font-size: 14px;
+      color: rgba(214,225,229,0.78);
+      line-height: 1.5;
+    }
+
+    .card.primary{
+      background: linear-gradient(135deg, rgba(247,148,33,0.16) 0%, rgba(211,25,114,0.12) 55%, rgba(84,0,173,0.10) 100%);
+      border-color: rgba(247,148,33,0.22);
+    }
+
+    .card.primary .card-icon{
+      background: linear-gradient(135deg, rgba(247,148,33,0.95) 0%, rgba(211,25,114,0.95) 100%);
+      border: 0;
+    }
+
+    .card.primary .card-icon svg{ stroke: #fff; }
+
+    /* ==================== PERFORMANCE BREAKDOWN ==================== */
+    .breakdown{
+      border-radius: var(--r-lg);
+      background: rgba(255,255,255,0.04);
+      border: 2px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(18px);
+      padding: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .breakdown::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(700px 280px at 15% 0%, rgba(247,148,33,0.10), rgba(247,148,33,0.0) 60%),
+        radial-gradient(800px 320px at 85% 25%, rgba(211,25,114,0.08), rgba(211,25,114,0.0) 60%);
+      opacity: 0.9;
+    }
+
+    .round-list{
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .round-item{
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 18px 18px;
+      border-radius: var(--r-md);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: transform 0.4s var(--ease-premium), border-color 0.4s var(--ease-premium), background 0.4s var(--ease-premium);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .round-item::before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 60%, var(--purple-primary) 100%);
+      transition: width 0.5s var(--ease-premium);
+    }
+
+    .round-item:hover{
+      transform: translateY(-6px);
+      background: rgba(255,255,255,0.085);
+      border-color: rgba(255,255,255,0.20);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.25);
+    }
+
+    .round-item:hover::before{ width: 100%; }
+
+    .round-info{
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .round-number{
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .round-number::after{
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, rgba(247,148,33,0.30) 0%, rgba(211,25,114,0.24) 70%, rgba(84,0,173,0.18) 100%);
+      filter: blur(0.2px);
+      opacity: 0.9;
+      z-index: 0;
+    }
+
+    .round-number span{ position: relative; z-index: 1; }
+
+    .round-text{
+      min-width: 0;
+    }
+
+    .round-title{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      font-size: 16px;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .round-subtitle{
+      font-size: 12px;
+      color: rgba(214,225,229,0.72);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .round-stats{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      justify-items: end;
+    }
+
+    .round-stat{
+      text-align: right;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      min-width: 98px;
+    }
+
+    .round-stat-value{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      margin-bottom: 2px;
+    }
+
+    .round-stat-label{
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(214,225,229,0.70);
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+    }
+
+    /* ==================== ACHIEVEMENTS ==================== */
+    .achievements-grid{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .achievement{
+      border-radius: var(--r-md);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(18px);
+      padding: 18px 16px;
+      text-align: left;
+      transition: transform 0.4s var(--ease-premium), border-color 0.4s var(--ease-premium), background 0.4s var(--ease-premium);
+      position: relative;
+      overflow: hidden;
+      min-height: 122px;
+    }
+
+    .achievement::before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 60%, var(--purple-primary) 100%);
+      transition: width 0.5s var(--ease-premium);
+      opacity: 0.95;
+    }
+
+    .achievement:hover{
+      transform: translateY(-8px);
+      background: rgba(255,255,255,0.085);
+      border-color: rgba(255,255,255,0.20);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.25);
+    }
+
+    .achievement:hover::before{ width: 100%; }
+
+    .achievement.locked{
+      opacity: 0.45;
+      filter: saturate(0.85);
+    }
+
+    .ach-top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .ach-icon{
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      flex: 0 0 auto;
+    }
+
+    .ach-icon svg{
+      width: 22px;
+      height: 22px;
+      stroke: rgba(247,148,33,0.95);
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .ach-title{
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      font-size: 14px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .ach-desc{
+      font-size: 12px;
+      color: rgba(214,225,229,0.74);
+      line-height: 1.45;
+    }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(84,0,173,0.18);
+      border: 1px solid rgba(84,0,173,0.30);
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(214,225,229,0.90);
+    }
+
+    /* ==================== CTA ==================== */
+    .cta{
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    .cta-button{
+      border: 0;
+      cursor: pointer;
+      border-radius: 18px;
+      padding: 18px 26px;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+      box-shadow: 0 22px 60px rgba(247,148,33,0.22);
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 54px;
+      transition: transform 0.35s var(--ease-premium), box-shadow 0.35s var(--ease-premium), filter 0.35s var(--ease-premium);
+    }
+
+    .cta-button::before{
+      /* light sweep */
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 60%;
+      height: 200%;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+      transform: rotate(20deg);
+      transition: left 0.7s var(--ease-premium);
+    }
+
+    .cta-button:hover{
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 28px 80px rgba(211,25,114,0.25);
+      filter: saturate(1.05);
+    }
+
+    .cta-button:hover::before{
+      left: 120%;
+    }
+
+    .cta-button svg{
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .cta-note{
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(214,225,229,0.72);
+      line-height: 1.6;
+    }
+
+    /* ==================== FOOTER ==================== */
+    .footer{
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+      text-align: center;
+      color: rgba(214,225,229,0.65);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* ==================== ENTRY MOTION ==================== */
+    .stagger{
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.85s var(--ease-premium) forwards;
+    }
+
+    .d1{ animation-delay: 0.10s; }
+    .d2{ animation-delay: 0.28s; }
+    .d3{ animation-delay: 0.46s; }
+    .d4{ animation-delay: 0.64s; }
+    .d5{ animation-delay: 0.82s; }
+
+    @keyframes fadeUp{
+      to{ opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1100px){
+      .stats-grid{ grid-template-columns: 1fr 1fr; }
+      .card.primary{ grid-column: 1 / -1; }
+      .round-item{ grid-template-columns: 1fr; }
+      .round-stats{ justify-items: start; grid-template-columns: repeat(3, minmax(90px, 1fr)); }
+      .round-stat{ text-align: left; }
+    }
+
+    @media (max-width: 780px){
+      .content{ padding: 30px 20px 28px; }
+      .hero-title{ font-size: 38px; }
+      .hero-subtitle{ font-size: 15px; }
+      .section-title{ font-size: 22px; }
+      .stats-grid{ grid-template-columns: 1fr; }
+      .card.primary{ grid-column: auto; }
+      .achievements-grid{ grid-template-columns: repeat(2, 1fr); }
+      .round-stats{ grid-template-columns: 1fr 1fr; }
+      .round-stat{ min-width: 0; }
+    }
+
+    @media (max-width: 420px){
+      .achievements-grid{ grid-template-columns: 1fr; }
+      .round-stats{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Ambient background orbs -->
+  <div class="orbs" aria-hidden="true">
+    <div class="orb orange"></div>
+    <div class="orb purple"></div>
+    <div class="orb pink"></div>
+  </div>
+
+  <main class="page">
+    <div class="container">
+      <section class="completion-shell">
+        <div class="content">
+
+          <!-- ==================== HERO ==================== -->
+          <header class="hero stagger d1">
+            <div class="success-emblem" aria-hidden="true">
+              <div class="emblem-icon">
+                <!-- Check icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+              </div>
+            </div>
+
+            <div class="kicker">
+              <span class="badge-dot" aria-hidden="true"></span>
+              Game Complete
+            </div>
+
+            <h1 class="hero-title">Congratulations!</h1>
+            <p class="hero-subtitle">
+              You've successfully completed all five rounds of The Data Game. Your journey from data
+              governance to decision storytelling demonstrates strong data literacy skills.
+            </p>
+
+            <div class="hero-badge-row">
+              <div class="completion-badge">
+                <span class="badge-dot" aria-hidden="true"></span>
+                All Rounds Complete ✓
+              </div>
+              <div class="pill">Maverx Certified Path</div>
+            </div>
+          </header>
+
+          <div class="divider stagger d2"></div>
+
+          <!-- ==================== FINAL STATS ==================== -->
+          <section class="section stagger d2">
+            <div class="section-header">
+              <h2 class="section-title">Your Final Performance</h2>
+              <div class="section-meta">Summary snapshot</div>
+            </div>
+
+            <div class="stats-grid">
+              <article class="card primary">
+                <div class="card-header">
+                  <div class="card-label">Total Score</div>
+                  <div class="card-icon" aria-hidden="true">
+                    <!-- Trophy -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8 21h8"></path>
+                      <path d="M12 17v4"></path>
+                      <path d="M7 4h10v5a5 5 0 0 1-10 0V4z"></path>
+                      <path d="M5 6H3v2a4 4 0 0 0 4 4"></path>
+                      <path d="M19 6h2v2a4 4 0 0 1-4 4"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-value">0000</div>
+                <div class="card-sub">Highest-impact metric across rounds.</div>
+              </article>
+
+              <article class="card">
+                <div class="card-header">
+                  <div class="card-label">Total Time</div>
+                  <div class="card-icon" aria-hidden="true">
+                    <!-- Clock -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 8v5l3 2"></path>
+                      <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-value">00:00</div>
+                <div class="card-sub">Total time spent completing the full game.</div>
+              </article>
+
+              <article class="card">
+                <div class="card-header">
+                  <div class="card-label">Final Grade</div>
+                  <div class="card-icon" aria-hidden="true">
+                    <!-- Badge -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-value">Rank</div>
+                <div class="card-sub">Your overall performance tier.</div>
+              </article>
+            </div>
+          </section>
+
+          <!-- ==================== PERFORMANCE BREAKDOWN ==================== -->
+          <section class="section stagger d3">
+            <div class="section-header">
+              <h2 class="section-title">Performance Breakdown</h2>
+              <div class="section-meta">Round-by-round</div>
+            </div>
+
+            <div class="breakdown">
+              <div class="round-list">
+                <!-- Round 1 -->
+                <div class="round-item">
+                  <div class="round-info">
+                    <div class="round-number"><span>1</span></div>
+                    <div class="round-text">
+                      <div class="round-title">Round 1 Title</div>
+                      <div class="round-subtitle">Round 1 Subtitle</div>
+                    </div>
+                  </div>
+                  <div class="round-stats">
+                    <div class="round-stat">
+                      <div class="round-stat-value">000</div>
+                      <div class="round-stat-label">Score</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">00:00</div>
+                      <div class="round-stat-label">Time</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">0%</div>
+                      <div class="round-stat-label">Accuracy</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Round 2 -->
+                <div class="round-item">
+                  <div class="round-info">
+                    <div class="round-number"><span>2</span></div>
+                    <div class="round-text">
+                      <div class="round-title">Round 2 Title</div>
+                      <div class="round-subtitle">Round 2 Subtitle</div>
+                    </div>
+                  </div>
+                  <div class="round-stats">
+                    <div class="round-stat">
+                      <div class="round-stat-value">000</div>
+                      <div class="round-stat-label">Score</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">00:00</div>
+                      <div class="round-stat-label">Time</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">0%</div>
+                      <div class="round-stat-label">Accuracy</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Round 3 -->
+                <div class="round-item">
+                  <div class="round-info">
+                    <div class="round-number"><span>3</span></div>
+                    <div class="round-text">
+                      <div class="round-title">Round 3 Title</div>
+                      <div class="round-subtitle">Round 3 Subtitle</div>
+                    </div>
+                  </div>
+                  <div class="round-stats">
+                    <div class="round-stat">
+                      <div class="round-stat-value">000</div>
+                      <div class="round-stat-label">Score</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">00:00</div>
+                      <div class="round-stat-label">Time</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">0%</div>
+                      <div class="round-stat-label">Accuracy</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Round 4 -->
+                <div class="round-item">
+                  <div class="round-info">
+                    <div class="round-number"><span>4</span></div>
+                    <div class="round-text">
+                      <div class="round-title">Round 4 Title</div>
+                      <div class="round-subtitle">Round 4 Subtitle</div>
+                    </div>
+                  </div>
+                  <div class="round-stats">
+                    <div class="round-stat">
+                      <div class="round-stat-value">000</div>
+                      <div class="round-stat-label">Score</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">00:00</div>
+                      <div class="round-stat-label">Time</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">0%</div>
+                      <div class="round-stat-label">Accuracy</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Round 5 -->
+                <div class="round-item">
+                  <div class="round-info">
+                    <div class="round-number"><span>5</span></div>
+                    <div class="round-text">
+                      <div class="round-title">Round 5 Title</div>
+                      <div class="round-subtitle">Round 5 Subtitle</div>
+                    </div>
+                  </div>
+                  <div class="round-stats">
+                    <div class="round-stat">
+                      <div class="round-stat-value">000</div>
+                      <div class="round-stat-label">Score</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">00:00</div>
+                      <div class="round-stat-label">Time</div>
+                    </div>
+                    <div class="round-stat">
+                      <div class="round-stat-value">0%</div>
+                      <div class="round-stat-label">Accuracy</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== ACHIEVEMENTS ==================== -->
+          <section class="section stagger d4">
+            <div class="section-header">
+              <h2 class="section-title">Achievements</h2>
+              <div class="section-meta">Unlocked milestones</div>
+            </div>
+
+            <div class="achievements-grid">
+              <div class="achievement">
+                <div class="ach-top">
+                  <div class="ach-icon" aria-hidden="true">
+                    <!-- Target -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 12l7-7"></path>
+                      <path d="M12 12v9"></path>
+                      <path d="M12 12H3"></path>
+                      <path d="M12 3a9 9 0 1 0 9 9"></path>
+                    </svg>
+                  </div>
+                  <div class="pill">Unlocked</div>
+                </div>
+                <div class="ach-title">Achievement 1</div>
+                <div class="ach-desc">Achievement description</div>
+              </div>
+
+              <div class="achievement">
+                <div class="ach-top">
+                  <div class="ach-icon" aria-hidden="true">
+                    <!-- Layers -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2l10 6-10 6L2 8l10-6z"></path>
+                      <path d="M2 12l10 6 10-6"></path>
+                      <path d="M2 16l10 6 10-6"></path>
+                    </svg>
+                  </div>
+                  <div class="pill">Unlocked</div>
+                </div>
+                <div class="ach-title">Achievement 2</div>
+                <div class="ach-desc">Achievement description</div>
+              </div>
+
+              <div class="achievement">
+                <div class="ach-top">
+                  <div class="ach-icon" aria-hidden="true">
+                    <!-- Chart -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M4 19V5"></path>
+                      <path d="M4 19h16"></path>
+                      <path d="M8 15v-4"></path>
+                      <path d="M12 15V7"></path>
+                      <path d="M16 15v-6"></path>
+                    </svg>
+                  </div>
+                  <div class="pill">Unlocked</div>
+                </div>
+                <div class="ach-title">Achievement 3</div>
+                <div class="ach-desc">Achievement description</div>
+              </div>
+
+              <div class="achievement locked">
+                <div class="ach-top">
+                  <div class="ach-icon" aria-hidden="true">
+                    <!-- Lock -->
+                    <svg viewBox="0 0 24 24">
+                      <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                      <path d="M6 11h12v10H6z"></path>
+                    </svg>
+                  </div>
+                  <div class="pill">Locked</div>
+                </div>
+                <div class="ach-title">Locked Achievement</div>
+                <div class="ach-desc">Not yet earned</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== CTA ==================== -->
+          <section class="cta stagger d5">
+            <button class="cta-button" onclick="sendResults()">
+              <!-- Mail -->
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h16v12H4z"></path>
+                <path d="M4 7l8 6 8-6"></path>
+              </svg>
+              <span>Get Results and Certificate (Sent To Email)</span>
+            </button>
+
+            <p class="cta-note">
+              Your complete performance report, and certificate will be sent to your email address.
+            </p>
+
+            <div class="footer">
+              Thank you for playing The Data Game!
+            </div>
+          </section>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function sendResults() {
+      // Send results email logic
+      alert('Results will be sent to your email address.');
+    }
+  </script>
+  <a href="5_fix_LevelOneComplete_MargusColors.html" class="nav-arrow left" title="Previous">←</a>
+</body>
+</html>

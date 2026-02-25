@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Game - Round Selector</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #111111;
+            --paper: #f6f1e8;
+            --paper-2: #efe6d7;
+            --stone: #cfc6b6;
+            --accent: #0f4c5c;
+            --accent-2: #b6402d;
+            --shadow: rgba(17, 17, 17, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Space Grotesk", sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at top left, #ffffff 0%, var(--paper) 38%, var(--paper-2) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .page {
+            width: min(980px, 100%);
+            background: rgba(255, 255, 255, 0.86);
+            border: 2px solid var(--ink);
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 18px 40px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+            inset: -120px auto auto -120px;
+            width: 240px;
+            height: 240px;
+            background: conic-gradient(from 120deg, rgba(15, 76, 92, 0.22), transparent 45%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .page::after {
+            content: "";
+            position: absolute;
+            right: -100px;
+            bottom: -120px;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle at center, rgba(182, 64, 45, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            border: 1.5px solid var(--ink);
+            border-radius: 999px;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: var(--paper-2);
+        }
+
+        h1 {
+            font-family: "Fraunces", serif;
+            font-size: clamp(32px, 4vw, 46px);
+            line-height: 1.1;
+            margin-top: 18px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #3f3a34;
+            max-width: 620px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 32px;
+        }
+
+        .nav-card,
+        .nav-card:visited {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .nav-card,
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            border: 2px solid var(--ink);
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 6px 6px 0 var(--stone);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            min-height: 120px;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 10px 10px 0 var(--ink);
+            background: #fff9f2;
+        }
+
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .nav-desc {
+            font-size: 13px;
+            color: #4b4540;
+        }
+
+        .nav-pill {
+            align-self: flex-start;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .nav-button {
+            border-style: dashed;
+            background: #faf7f1;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .nav-button .nav-pill {
+            background: var(--accent-2);
+        }
+
+        .footer {
+            margin-top: 32px;
+            font-size: 12px;
+            color: #6b645d;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.05s; }
+        .fade-in:nth-child(2) { animation-delay: 0.12s; }
+        .fade-in:nth-child(3) { animation-delay: 0.18s; }
+        .fade-in:nth-child(4) { animation-delay: 0.24s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 36px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <span class="eyebrow">Data Game Rounds</span>
+        <h1>Select Your Round</h1>
+        <p class="subtitle">Choose a round to begin your data literacy journey.</p>
+
+        <div class="button-grid">
+            <a class="nav-card fade-in" href="Margus_Round1Level1_NoCNoI/1_level1_Intro_NoCNoI.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Round 1</div>
+                <div class="nav-desc">Data Exploration - Start here and learn the basics.</div>
+            </a>
+
+            <a class="nav-card fade-in" href="Round%202/round2%20intro.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Round 2</div>
+                <div class="nav-desc">Insight Hunter - Analyze dashboards and identify KPIs.</div>
+            </a>
+
+            <a class="nav-card fade-in" href="Level3_EthicalGatekeeper_BW_Wireframes%20(1)/1_level3_Intro_NoCNoI.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Round 3</div>
+                <div class="nav-desc">Ethical Gatekeeper - Navigate complex data ethics decisions.</div>
+            </a>
+
+            <div class="nav-button fade-in">
+                <span class="nav-pill">Coming Soon</span>
+                <div class="nav-title">Round 4</div>
+                <div class="nav-desc">Executive Dashboard - Ready for teammate integration.</div>
+            </div>
+
+            <a class="nav-card fade-in" href="Round%205/round5%20intro.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Round 5</div>
+                <div class="nav-desc">Narrative Builder - Craft compelling data stories.</div>
+            </a>
+        </div>
+
+        <h2 style="margin-top: 48px; margin-bottom: 18px; font-size: 24px; font-weight: 600;">Round 1 - Alternative Styles</h2>
+        <p class="subtitle" style="margin-bottom: 24px;">Explore different visual designs for Round 1:</p>
+
+        <div class="button-grid">
+            <a class="nav-card fade-in" href="Margus_Round1Level1_NoCNoI/1_level1_Intro_NoCNoI.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Default Black and White</div>
+                <div class="nav-desc">Wireframe version with the full Round 1 flow.</div>
+            </a>
+
+            <a class="nav-card fade-in" href="Miltons%20Color/1_level1_Intro_NoCNoI.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Miltons Color</div>
+                <div class="nav-desc">Open the Milton color build.</div>
+            </a>
+
+            <a class="nav-card fade-in" href="Margus_R1_CompletePages_ColorsIcons/1Welcome_Page_MargusColors.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Margus Color</div>
+                <div class="nav-desc">Open the Margus color build.</div>
+            </a>
+
+            <a class="nav-card fade-in" href="Oskarz%20pages/1_level1_Intro_Colored.html">
+                <span class="nav-pill">Live</span>
+                <div class="nav-title">Oskars Color</div>
+                <div class="nav-desc">Open Oskarz color build (Round 1 intro).</div>
+            </a>
+        </div>
+
+        <p class="footer">Rounds 3 & 4 are ready for your teammates to link. Round 2 & 5 are fully integrated.</p>
+    </main>
+</body>
+</html>

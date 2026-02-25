@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!--
+  File: Welcome_Page_NoColor.html
+  Project: The Data Game (MVP) — Global Pages
+  Standardization: formatting + comment conventions only (no DOM/text/layout changes)
+  Updated: 2026-02-06
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Game - Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Grayscale palette */
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .welcome-container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 16px;
+            padding: 60px 80px;
+            box-shadow: 12px 12px 0px var(--gray-300);
+            position: relative;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==================== HEADER SECTION ==================== */
+        .welcome-heading {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+        }
+
+        .game-logo {
+            width: 120px;
+            height: 120px;
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            margin: 0 auto 40px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.2;
+            padding: 10px;
+            position: relative;
+        }
+
+        .game-logo::after {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 3px dashed var(--gray-400);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .game-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--black);
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .game-tagline {
+            font-size: 20px;
+            color: var(--gray-700);
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 500;
+        }
+
+        /* ==================== DESCRIPTION SECTION ==================== */
+        .description-section {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .description-section::before {
+            content: 'GAME OVERVIEW';
+            position: absolute;
+            top: -12px;
+            left: 30px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .description-text {
+            font-size: 16px;
+            color: var(--gray-800);
+            line-height: 1.8;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            margin: 0 auto 15px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            font-size: 12px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        /* ==================== GAME INFO SECTION ==================== */
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .info-item {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .info-icon {
+            font-size: 10px;
+            margin-bottom: 10px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 5px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ==================== ACTION SECTION ==================== */
+        .action-section {
+            text-align: center;
+        }
+
+        .start-button {
+            background: var(--black);
+            color: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 12px;
+            padding: 20px 60px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-button:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: scale(1.05);
+            box-shadow: 8px 8px 0px var(--gray-300);
+        }
+
+        .button-icon {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .ready-check {
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--gray-600);
+            font-style: italic;
+        }
+
+        /* ==================== FOOTER INFO ==================== */
+        .footer-info {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid var(--gray-300);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .welcome-container {
+                padding: 40px 30px;
+            }
+
+            .game-title {
+                font-size: 36px;
+            }
+
+            .game-tagline {
+                font-size: 16px;
+            }
+
+            .game-features {
+                grid-template-columns: 1fr;
+            }
+
+            .game-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .start-button {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <!-- ==================== WELCOME HEADING ==================== -->
+        <div class="welcome-heading">Welcome</div>
+        
+        <!-- ==================== GAME LOGO & TITLE ==================== -->
+        <div class="game-logo">Game<br>Logo</div>
+        <h1 class="game-title">The Data Game</h1>
+        <p class="game-tagline">From data to decisions—one challenge at a time</p>
+
+        <!-- ==================== DESCRIPTION SECTION ==================== -->
+        <div class="description-section">
+            <p class="description-text">
+                Welcome to The Data Game — a digital escape room built to turn data theory into real-world skill. 
+                Across five timed rounds, you'll inspect messy datasets, spot meaningful trends, make ethical calls, 
+                and connect insights to business processes. Your score rewards accuracy and speed, and every mistake 
+                triggers instant, constructive feedback so you learn while you play.
+            </p>
+
+            <div class="game-features">
+                <div class="feature-card">
+                    <div class="feature-icon">Icon</div>
+                    <div class="feature-title">Five Rooms. One Skill Ladder.</div>
+                    <div class="feature-description">
+                        Progress through five sequential challenges—each one unlocks only when you prove mastery. Build skills from data governance and analysis to ethics, process thinking, and decision storytelling.
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">Icon</div>
+                    <div class="feature-title">Realistic Data Decisions</div>
+                    <div class="feature-description">
+                        Work with imperfect information—conflicting datasets, ambiguous ownership, outliers, missing context. Learn how to judge reliability, select the right KPI, and separate signal from noise.
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">Icon</div>
+                    <div class="feature-title">Score, Feedback, and Momentum</div>
+                    <div class="feature-description">
+                        Your score reflects accuracy + time. Every action gets immediate feedback, so mistakes become learning moments. Progress saves automatically so you can return and finish later.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== GAME INFO ==================== -->
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-icon">Icon</div>
+                <div class="info-value">5</div>
+                <div class="info-label">Rounds</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">Icon</div>
+                <div class="info-value">~X</div>
+                <div class="info-label">Duration</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">Icon</div>
+                <div class="info-value">Level</div>
+                <div class="info-label">Difficulty</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">Icon</div>
+                <div class="info-value">000</div>
+                <div class="info-label">Max Points</div>
+            </div>
+        </div>
+
+        <!-- ==================== ACTION SECTION ==================== -->
+        <div class="action-section">
+            <button class="start-button" onclick="startGame()">
+                <span>Start Game</span>
+                <span class="button-icon">→</span>
+            </button>
+            <p class="ready-check">Ready to test your data literacy skills?</p>
+        </div>
+
+        <!-- ==================== FOOTER INFO ==================== -->
+        <div class="footer-info">
+            <p class="footer-text">
+                Navigate through rounds, solve challenges, and master data concepts.<br>
+                Your progress will be saved automatically.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function startGame() {
+            // Navigate to Round 1 introduction page
+            alert('Navigate to: Round 1 Introduction Page');
+            // window.location.href = 'round_1_intro.html';
+        }
+
+        // Animation on load
+        window.addEventListener('load', function() {
+            document.querySelector('.welcome-container').style.opacity = '0';
+            setTimeout(() => {
+                document.querySelector('.welcome-container').style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

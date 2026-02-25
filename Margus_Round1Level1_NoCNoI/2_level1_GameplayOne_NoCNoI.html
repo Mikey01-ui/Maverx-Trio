@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1 - Gameplay Screen (B&W Wireframe)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Grayscale palette */
+            --black: #000000;
+            --gray-900: #1a1a1a;
+            --gray-800: #2d2d2d;
+            --gray-700: #404040;
+            --gray-600: #666666;
+            --gray-500: #808080;
+            --gray-400: #999999;
+            --gray-300: #cccccc;
+            --gray-200: #e0e0e0;
+            --gray-100: #f0f0f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ==================== NAVIGATION ARROWS ==================== */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            border: 3px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        /* Annotation labels for wireframe */
+        .annotation {
+            position: absolute;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ==================== HEADER BAR ==================== */
+        .header-bar {
+            background: var(--white);
+            border-bottom: 3px solid var(--black);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .header-bar::after {
+            content: 'HEADER BAR';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            padding: 2px 8px;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 2px solid var(--black);
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gray-800);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .player-name {
+            font-size: 14px;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .header-center {
+            text-align: center;
+            border: 2px dashed var(--gray-400);
+            padding: 10px 30px;
+            border-radius: 8px;
+        }
+
+        .round-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+
+        .round-subtitle {
+            font-size: 11px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .timer-display,
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            background: var(--gray-100);
+        }
+
+        .timer-icon,
+.score-icon {
+    font-size: 11px;
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.timer-value,
+        .score-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        /* ==================== MAIN CONTAINER ==================== */
+        .main-container {
+            padding: 30px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* ==================== PROGRESS BAR ==================== */
+        .progress-section {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .progress-section::before {
+            content: 'PROGRESS INDICATOR';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--white);
+            padding: 2px 8px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: var(--gray-700);
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            width: 300px;
+            height: 16px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--black);
+            border-radius: 18px;
+            transition: width 0.5s ease;
+            width: 30%;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 30px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 4px,
+                rgba(255,255,255,0.3) 4px,
+                rgba(255,255,255,0.3) 8px
+            );
+        }
+
+        .progress-count {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .hint-button {
+            padding: 10px 20px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            color: var(--black);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hint-button:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .hint-icon {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hint-count {
+            background: var(--black);
+            color: var(--white);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .hint-button:hover .hint-count {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* ==================== GAME LAYOUT ==================== */
+        .game-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 350px;
+            gap: 30px;
+            min-height: 600px;
+        }
+
+        /* ==================== DATASET CARDS AREA ==================== */
+        .datasets-area {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .datasets-area::before {
+            content: 'DATASET CARDS (DRAGGABLE)';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--white);
+            padding: 2px 8px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .area-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--black);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--black);
+        }
+
+        .datasets-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 700px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .datasets-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .datasets-grid::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 10px;
+        }
+
+        .datasets-grid::-webkit-scrollbar-thumb {
+            background: var(--black);
+            border-radius: 10px;
+        }
+
+        .dataset-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            padding: 15px;
+            padding-right: 70px;
+            min-height: 115px;
+            cursor: move;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .dataset-card:hover {
+            background: var(--gray-200);
+            transform: translateX(5px);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        .dataset-card.dragging {
+            opacity: 0.5;
+            transform: rotate(3deg);
+        }
+
+        .dataset-card.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: var(--gray-300);
+        }
+
+        .dataset-card.locked::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 55px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .dataset-icon {
+    width: 45px;
+    height: 45px;
+    background: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1.2;
+    padding: 4px;
+}
+
+.dataset-info {
+            flex: 1;
+        }
+
+        .dataset-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+
+        .dataset-meta {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-family: monospace;
+        }
+
+                .view-metadata-btn {
+            font-size: 10px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid var(--black);
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: var(--white);
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            flex-shrink: 0;
+            line-height: 1;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .view-metadata-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+/* ==================== DROP ZONES AREA ==================== */
+        .dropzones-area {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .dropzones-area::before {
+            content: 'DEPARTMENT DROP ZONES';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--white);
+            padding: 2px 8px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .dropzones-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .drop-zone {
+            background: var(--white);
+            border: 3px dashed var(--gray-400);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--black);
+            background: var(--gray-100);
+        }
+
+        .drop-zone.drag-over {
+            border-color: var(--black);
+            background: var(--gray-200);
+            border-style: solid;
+        }
+
+        .drop-zone-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--black);
+        }
+
+        .dept-icon {
+    width: 35px;
+    height: 35px;
+    background: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1.1;
+    padding: 3px;
+}
+
+.dept-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .drop-zone-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drop-zone-placeholder {
+            text-align: center;
+            padding: 30px 10px;
+            font-size: 12px;
+            color: var(--gray-500);
+            font-style: italic;
+            border: 1px dashed var(--gray-300);
+            border-radius: 6px;
+        }
+
+        .dropped-dataset {
+            background: var(--gray-800);
+            color: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropped-dataset .check-icon {
+            font-size: 14px;
+        }
+
+        /* ==================== FEEDBACK PANEL ==================== */
+        .feedback-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+            min-height: 0;
+        }
+
+        .feedback-panel {
+            background: var(--gray-100);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 25px;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .feedback-item {
+            padding: 15px;
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: var(--white);
+        }
+
+        .feedback-item.success {
+            background: var(--gray-200);
+            border-width: 3px;
+        }
+
+        .feedback-item.success::before {
+            content: 'SUCCESS';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 8px;
+            font-weight: 700;
+            background: var(--black);
+            color: var(--white);
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+
+        .feedback-item.error {
+            background: var(--white);
+            border-style: double;
+            border-width: 4px;
+        }
+
+        .feedback-item.error::before {
+            content: 'ERROR';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 8px;
+            font-weight: 700;
+            background: var(--black);
+            color: var(--white);
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+
+        .feedback-item.info {
+            background: var(--gray-100);
+        }
+        
+        .feedback-icon {
+    font-size: 10px;
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.feedback-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .feedback-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--black);
+        }
+
+        .feedback-message {
+            font-size: 12px;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        /* ==================== METADATA MODAL ==================== */
+        .metadata-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metadata-modal.active {
+            display: flex;
+        }
+
+        .metadata-content {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 12px 12px 0px var(--black);
+            position: relative;
+        }
+
+        .metadata-content::before {
+            content: 'METADATA PANEL';
+            position: absolute;
+            top: -12px;
+            left: 30px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+        }
+
+        .metadata-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            border: 2px solid var(--black);
+        }
+
+        .metadata-close:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .metadata-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--black);
+        }
+
+        .metadata-header-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1.2;
+    padding: 6px;
+}
+
+.metadata-header-info h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 5px;
+        }
+
+        .metadata-header-info p {
+            font-size: 12px;
+            color: var(--gray-600);
+            font-family: monospace;
+        }
+
+        .metadata-row {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+        }
+
+        .metadata-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .metadata-value {
+            font-size: 14px;
+            color: var(--black);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .reliability-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .lineage-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        /* Wireframe grid overlay (optional - can be toggled) */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0,0,0,0.03) 19px, rgba(0,0,0,0.03) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0,0,0,0.03) 19px, rgba(0,0,0,0.03) 20px);
+            display: none; /* Toggle to show/hide */
+        }
+
+        
+        /* ==================== PROCEED PANEL ==================== */
+        .proceed-panel {
+            width: 100%;
+            margin-top: auto;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .proceed-btn {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: var(--gray-300);
+            color: var(--gray-700);
+            cursor: not-allowed;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .proceed-btn.is-enabled {
+            background: var(--black);
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        .proceed-btn.is-enabled:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .proceed-help {
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--gray-700);
+            line-height: 1.4;
+        }
+
+/* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1400px) {
+            .game-layout {
+                grid-template-columns: 280px 1fr 320px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .dropzones-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .dropzones-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Optional grid overlay for precise layout work -->
+    <div class="grid-overlay"></div>
+
+    <!-- HEADER BAR -->
+    <div class="header-bar">
+        <div class="header-left">
+            <div class="player-info">
+                <div class="player-avatar">JD</div>
+                <div>
+                    <div class="player-name">Player: John Doe</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="round-title">Round 1: Governance Gate</div>
+            <div class="round-subtitle">Data Awareness & Organizational Culture</div>
+        </div>
+
+        <div class="header-right">
+            <div class="timer-display">
+                <span class="timer-icon">Icon</span>
+                <span class="timer-value" id="timer">12:45</span>
+            </div>
+            <div class="score-display">
+                <span class="score-icon">Icon</span>
+                <span class="score-value" id="score">250</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <!-- PROGRESS SECTION -->
+        <div class="progress-section">
+            <div class="progress-info">
+                <span class="progress-label">Progress:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+                <span class="progress-count"><span id="completed">3</span> / <span id="total">10</span> Datasets Placed</span>
+            </div>
+            <button class="hint-button" onclick="showHint()">
+                <span class="hint-icon">Icon</span>
+                <span>Get Hint</span>
+                <span class="hint-count" id="hintCount">3</span>
+            </button>
+        </div>
+
+        <!-- GAME LAYOUT -->
+        <div class="game-layout">
+            <!-- LEFT: DATASET CARDS -->
+            <div class="datasets-area">
+                <div class="area-title">Available Datasets</div>
+                <div class="datasets-grid" id="datasetsGrid">
+                    <!-- Dataset Cards -->
+                    <div class="dataset-card" draggable="true" data-id="1">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Sales Q4 2024</div>
+                            <div class="dataset-meta">sales_q4_2024.csv</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(1)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="2">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Customer Database</div>
+                            <div class="dataset-meta">customer_master.db</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(2)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="3">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Financial Reports</div>
+                            <div class="dataset-meta">finance_2024.xlsx</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(3)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="4">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Production Logs</div>
+                            <div class="dataset-meta">production_2024.log</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(4)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="5">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Inventory System</div>
+                            <div class="dataset-meta">inventory_master.db</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(5)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="6">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Marketing Campaigns</div>
+                            <div class="dataset-meta">campaigns_2024.json</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(6)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="7">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">IT Service Desk</div>
+                            <div class="dataset-meta">servicedesk_tickets.csv</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(7)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="8">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">HR Employee Data</div>
+                            <div class="dataset-meta">hr_employees.db</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(8)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="9">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Logistics Tracking</div>
+                            <div class="dataset-meta">logistics_2024.csv</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(9)">Info</span>
+                    </div>
+
+                    <div class="dataset-card" draggable="true" data-id="10">
+                        <div class="dataset-icon">Icon</div>
+                        <div class="dataset-info">
+                            <div class="dataset-name">Website Analytics</div>
+                            <div class="dataset-meta">web_analytics.json</div>
+                        </div>
+                        <span class="view-metadata-btn" onclick="openMetadata(10)">Info</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTER: DROP ZONES -->
+            <div class="dropzones-area">
+                <div class="area-title">Department Drop Zones</div>
+                <div class="dropzones-grid">
+                    <!-- Sales Department -->
+                    <div class="drop-zone" data-dept="sales">
+                        <div class="drop-zone-header">
+                            <div class="dept-icon">Icon</div>
+                            <div class="dept-name">Sales</div>
+                        </div>
+                        <div class="drop-zone-content">
+                            <div class="drop-zone-placeholder">Drop datasets here...</div>
+                        </div>
+                    </div>
+
+                    <!-- Finance Department -->
+                    <div class="drop-zone" data-dept="finance">
+                        <div class="drop-zone-header">
+                            <div class="dept-icon">Icon</div>
+                            <div class="dept-name">Finance</div>
+                        </div>
+                        <div class="drop-zone-content">
+                            <div class="drop-zone-placeholder">Drop datasets here...</div>
+                        </div>
+                    </div>
+
+                    <!-- Operations Department -->
+                    <div class="drop-zone" data-dept="operations">
+                        <div class="drop-zone-header">
+                            <div class="dept-icon">Icon</div>
+                            <div class="dept-name">Operations</div>
+                        </div>
+                        <div class="drop-zone-content">
+                            <div class="drop-zone-placeholder">Drop datasets here...</div>
+                        </div>
+                    </div>
+
+                    <!-- IT Department -->
+                    <div class="drop-zone" data-dept="it">
+                        <div class="drop-zone-header">
+                            <div class="dept-icon">Icon</div>
+                            <div class="dept-name">IT</div>
+                        </div>
+                        <div class="drop-zone-content">
+                            <div class="drop-zone-placeholder">Drop datasets here...</div>
+                        </div>
+                    </div>
+
+                    <!-- HR Department -->
+                    <div class="drop-zone" data-dept="hr">
+                        <div class="drop-zone-header">
+                            <div class="dept-icon">Icon</div>
+                            <div class="dept-name">Human Resources</div>
+                        </div>
+                        <div class="drop-zone-content">
+                            <div class="drop-zone-placeholder">Drop datasets here...</div>
+                        </div>
+                    </div>
+
+                    <!-- Marketing Department -->
+                    <div class="drop-zone" data-dept="marketing">
+                        <div class="drop-zone-header">
+                            <div class="dept-icon">Icon</div>
+                            <div class="dept-name">Marketing</div>
+                        </div>
+                        <div class="drop-zone-content">
+                            <div class="drop-zone-placeholder">Drop datasets here...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: FEEDBACK PANEL -->
+            <div class="feedback-area">
+                <div class="feedback-panel">
+                    <div class="area-title">Feedback Log</div>
+                    <div id="feedbackLog">
+                        <div class="feedback-item info">
+                            <span class="feedback-icon">Icon</span>
+                            <div class="feedback-content">
+                                <div class="feedback-title">Welcome to Round 1!</div>
+                                <div class="feedback-message">Assign each dataset to the correct department. Click "i" to view metadata.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- PROCEED PANEL -->
+                <div class="proceed-panel">
+                    <button class="proceed-btn" id="proceedBtn" type="button" disabled>Proceed to Next Phase</button>
+                    <div class="proceed-help">
+                        The button is not unlocked until the user completes the first phase successful. Upon all datacards being correctly placed, the button becomes highlighted (previously being grayed out), allowing the user to progress by clicking it.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- METADATA MODAL -->
+    <div class="metadata-modal" id="metadataModal">
+        <div class="metadata-content">
+            <span class="metadata-close" onclick="closeMetadata()">×</span>
+            
+            <div class="metadata-header">
+                <div class="metadata-header-icon">Icon</div>
+                <div class="metadata-header-info">
+                    <h3 id="modalDatasetName">Sales Q4 2024</h3>
+                    <p id="modalDatasetFile">sales_q4_2024.csv</p>
+                </div>
+            </div>
+
+            <div class="metadata-row">
+                <span class="metadata-label">Data Source</span>
+                <div class="metadata-value" id="modalSource">SAP ERP System - Sales Module</div>
+            </div>
+
+            <div class="metadata-row">
+                <span class="metadata-label">Data Owner</span>
+                <div class="metadata-value" id="modalOwner">Sarah Johnson, VP of Sales</div>
+            </div>
+
+            <div class="metadata-row">
+                <span class="metadata-label">Last Updated</span>
+                <div class="metadata-value" id="modalUpdated">January 15, 2025</div>
+            </div>
+
+            <div class="metadata-row">
+                <span class="metadata-label">Reliability</span>
+                <div class="metadata-value">
+                    <span class="reliability-indicator">
+                        ✓ High - Validated and Audited
+                    </span>
+                </div>
+            </div>
+
+            <div class="metadata-row">
+                <span class="metadata-label">Data Lineage</span>
+                <div class="metadata-value">
+                    <span class="lineage-badge">Source System</span>
+                    <span class="lineage-badge">ETL Process</span>
+                    <span class="lineage-badge">Data Warehouse</span>
+                    <span class="lineage-badge">Reporting Layer</span>
+                </div>
+            </div>
+
+            <div class="metadata-row">
+                <span class="metadata-label">Description</span>
+                <div class="metadata-value" id="modalDescription">
+                    Quarterly sales performance data including revenue, units sold, customer segments, and regional breakdowns. 
+                    This dataset is critical for sales forecasting and performance tracking.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== NAVIGATION ARROWS ==================== -->
+    <a href="1_level1_Intro_NoCNoI.html" class="nav-arrow left" title="Previous">←</a>
+    <a href="3_level1_GameplayTwo_NoCNoI.html" class="nav-arrow right" title="Next">→</a>
+
+    <script>
+        // Same JavaScript functionality as color version
+        let completedDatasets = 3;
+        const totalDatasets = 10;
+        let hintsRemaining = 3;
+        const correctPlacements = {
+            1: 'sales', 2: 'marketing', 3: 'finance', 4: 'operations', 5: 'operations',
+            6: 'marketing', 7: 'it', 8: 'hr', 9: 'operations', 10: 'marketing'
+        };
+
+        // Proceed button (static UI placeholder; enabled once Phase 1 is completed)
+        let phaseIsComplete = false;
+        const proceedBtn = document.getElementById('proceedBtn');
+
+        function setProceedEnabled(enabled) {
+            if (!proceedBtn) return;
+            proceedBtn.disabled = !enabled;
+            proceedBtn.classList.toggle('is-enabled', enabled);
+        }
+
+        function proceedToNextPhase() {
+            alert('Going to next round...');
+        }
+
+        if (proceedBtn) {
+            proceedBtn.addEventListener('click', proceedToNextPhase);
+        }
+
+
+        function updateProgress() {
+            const percentage = (completedDatasets / totalDatasets) * 100;
+            const isCompleteNow = completedDatasets >= totalDatasets;
+
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('completed').textContent = completedDatasets;
+
+            setProceedEnabled(isCompleteNow);
+
+            if (isCompleteNow && !phaseIsComplete) {
+                phaseIsComplete = true;
+                addFeedback('success', 'Round Complete!', 'All datasets correctly placed!');
+            }
+        }
+
+const datasetCards = document.querySelectorAll('.dataset-card');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        let draggedElement = null;
+
+        datasetCards.forEach(card => {
+            card.addEventListener('dragstart', function(e) {
+                if (this.classList.contains('locked')) return;
+                draggedElement = this;
+                this.classList.add('dragging');
+            });
+            card.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+        });
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            zone.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                if (!draggedElement) return;
+
+                const datasetId = draggedElement.getAttribute('data-id');
+                const department = this.getAttribute('data-dept');
+                const datasetName = draggedElement.querySelector('.dataset-name').textContent;
+
+                if (correctPlacements[datasetId] === department) {
+                    const dropContent = this.querySelector('.drop-zone-content');
+                    const placeholder = dropContent.querySelector('.drop-zone-placeholder');
+                    if (placeholder) placeholder.remove();
+
+                    const droppedItem = document.createElement('div');
+                    droppedItem.className = 'dropped-dataset';
+                    droppedItem.innerHTML = `<span class="check-icon">✓</span> ${datasetName}`;
+                    dropContent.appendChild(droppedItem);
+
+                    draggedElement.classList.add('locked');
+                    draggedElement.setAttribute('draggable', 'false');
+                    completedDatasets++;
+updateProgress();
+                    addFeedback('success', 'Correct!', `"${datasetName}" correctly assigned.`);
+                } else {
+addFeedback('error', 'Incorrect!', `"${datasetName}" doesn't belong here.`);
+                }
+            });
+        });
+
+        function addFeedback(type, title, message) {
+            const feedbackLog = document.getElementById('feedbackLog');
+            const feedbackItem = document.createElement('div');
+            feedbackItem.className = `feedback-item ${type}`;
+            let icon = 'Icon';
+            feedbackItem.innerHTML = `
+                <span class="feedback-icon">${icon}</span>
+                <div class="feedback-content">
+                    <div class="feedback-title">${title}</div>
+                    <div class="feedback-message">${message}</div>
+                </div>
+            `;
+            feedbackLog.insertBefore(feedbackItem, feedbackLog.firstChild);
+        }
+
+        function openMetadata(datasetId) {
+            document.getElementById('metadataModal').classList.add('active');
+        }
+
+        function closeMetadata() {
+            document.getElementById('metadataModal').classList.remove('active');
+        }
+
+        function showHint() {
+            if (hintsRemaining <= 0) {
+                addFeedback('error', 'No Hints Left', 'You have used all available hints.');
+                return;
+            }
+            hintsRemaining--;
+            document.getElementById('hintCount').textContent = hintsRemaining;
+addFeedback('info', 'Hint', 'Check the Data Owner field - it often indicates the responsible department.');
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>
